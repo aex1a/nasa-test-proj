@@ -147,12 +147,12 @@ background:var(--accent);margin-right:.75rem;flex-shrink:0;
 opacity:0;transition:opacity .15s;
 }
 .nav-item.active .nav-dot{opacity:1}
-.sidebar-playlists{
+.sidebar-Albums{
 flex:1;overflow-y:auto;
 padding:0 1.5rem;margin-top:.5rem;
 }
-.sidebar-playlists::-webkit-scrollbar{width:3px}
-.sidebar-playlists::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px}
+.sidebar-Albums::-webkit-scrollbar{width:3px}
+.sidebar-Albums::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px}
 .sidebar-pl-item{
 font-size:.82rem;color:var(--text3);
 padding:.35rem 0;cursor:pointer;
@@ -433,7 +433,7 @@ font-size:.62rem;color:rgba(255,255,255,.65);font-weight:500;
 }
 
 /* ================================================================
-  PAGE: PLAYLISTS
+  PAGE: Albums
   ================================================================ */
 .pl-create-bar{
 display:flex;align-items:center;gap:.75rem;
@@ -676,9 +676,9 @@ or type <strong>DEMO_KEY</strong> to explore with limited requests.
 <div class="nav-item" data-page="asteroids"><span class="nav-dot"></span>Asteroids</div>
 <div class="nav-item" data-page="mars"><span class="nav-dot"></span>Mars Gallery</div>
 <div class="nav-section-label">Your Library</div>
-<div class="nav-item" data-page="playlists"><span class="nav-dot"></span>Space Playlists</div>
-<div class="nav-section-label" style="margin-top:.5rem">Playlists</div>
-<div class="sidebar-playlists" id="sidebarPlaylists"></div>
+<div class="nav-item" data-page="Albums"><span class="nav-dot"></span>Space Album</div>
+<div class="nav-section-label" style="margin-top:.5rem">Albums</div>
+<div class="sidebar-Albums" id="sidebarAlbums"></div>
 </nav>
 
 <div class="topbar">
@@ -735,20 +735,20 @@ NASA Live Data
 </div>
 </div>
 
-<div class="page" id="page-playlists">
+<div class="page" id="page-Albums">
 <div class="sec-head">
-<h2>Space Playlists</h2>
-<button class="btn btn-sm" id="openCreateModal">Create Playlist</button>
+<h2>Space Albums</h2>
+<button class="btn btn-sm" id="openCreateModal">Create Album</button>
 </div>
-<div class="pl-scroll" id="playlistScroll"></div>
+<div class="pl-scroll" id="Albumscroll"></div>
 </div>
 
 <div id="playlistDetailPage" style="display:none;padding-top:calc(var(--hdr) + 1rem)">
-<button class="btn-ghost" id="backToPlaylists" style="margin-bottom:1.5rem">← Back</button>
+<button class="btn-ghost" id="backToAlbums" style="margin-bottom:1.5rem">← Back</button>
 <div class="pl-detail-hero">
 <div class="pl-detail-cover"><img id="detailCoverImg" src="" alt=""/></div>
 <div class="pl-detail-meta">
-<p style="font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:.4rem">Playlist</p>
+<p style="font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:.4rem">Albums</p>
 <h1 id="detailTitle"></h1>
 <p id="detailDesc"></p>
 <small id="detailMeta"></small>
@@ -773,14 +773,14 @@ NASA Live Data
 <button class="bottom-nav-item" data-page="mars">
 <span class="bottom-nav-dot"></span>Mars
 </button>
-<button class="bottom-nav-item" data-page="playlists">
-<span class="bottom-nav-dot"></span>Playlists
+<button class="bottom-nav-item" data-page="Albums">
+<span class="bottom-nav-dot"></span>Albums
 </button>
 </div>
 
 </div><div class="modal-overlay" id="createModal" style="display:none">
 <div class="modal-box">
-<h3>Create Playlist</h3>
+<h3>Create Albums</h3>
 <div class="form-group">
 <label>Playlist Title</label>
 <input type="text" id="plTitle" placeholder="e.g. Asteroid Drift"/>
@@ -816,7 +816,7 @@ NASA Live Data
   ============================================================ */
 const NASA = 'https://api.nasa.gov';
 let API_KEY = '';
-let playlists = [];
+let Albums = [];
 let moonData = null; 
 const ASTEROID_BG = [
 'https://images-assets.nasa.gov/image/PIA20180/PIA20180~thumb.jpg',
@@ -826,7 +826,7 @@ const ASTEROID_BG = [
 'https://images-assets.nasa.gov/image/PIA24307/PIA24307~thumb.jpg',
 'https://images-assets.nasa.gov/image/PIA20188/PIA20188~thumb.jpg',
 ];
-const DEFAULT_PLAYLISTS = [
+const DEFAULT_Albums = [
 {
 id:'pl-1',title:'Asteroid Drift',
 desc:'Float through the belt. Deep drones and cosmic silence.',
@@ -858,7 +858,7 @@ isDefault:true,query:'mars'
 ];
 const PAGE_TITLES = {
 home:'Today in Space',moon:'Moon Cycle',
-asteroids:'Asteroids',mars:'Mars Gallery',playlists:'Space Playlists'
+asteroids:'Asteroids',mars:'Mars Gallery',Albums:'Space Albums'
 };
 
 /* ============================================================
@@ -886,11 +886,11 @@ if(e.key==='Enter')document.getElementById('keyBtn').click();
 function bootApp(){
 document.getElementById('keyScreen').style.display='none';
 document.getElementById('app').style.display='block';
-loadPlaylists();
+loadAlbums();
 fetchAPOD();
 fetchNEO();
 fetchMarsWithFallback(3500);
-renderPlaylists();
+renderAlbums();
 initNav();
 }
 
@@ -1217,26 +1217,26 @@ fetchMarsWithFallback(s);
 });
 
 /* ============================================================
-  PLAYLISTS
+  Albums
   ============================================================ */
-function loadPlaylists(){
+function loadAlbums(){
 try{
-const stored=localStorage.getItem('cosmos_playlists');
-playlists=stored?JSON.parse(stored):[...DEFAULT_PLAYLISTS];
-}catch{playlists=[...DEFAULT_PLAYLISTS]}
-DEFAULT_PLAYLISTS.forEach(def=>{
-if(!playlists.find(p=>p.id===def.id))playlists.unshift(def);
+const stored=localStorage.getItem('cosmos_Albums');
+Albums=stored?JSON.parse(stored):[...DEFAULT_Albums];
+}catch{Albums=[...DEFAULT_Albums]}
+DEFAULT_Albums.forEach(def=>{
+if(!Albums.find(p=>p.id===def.id))Albums.unshift(def);
 });
 }
-function savePlaylists(){
-try { localStorage.setItem('cosmos_playlists',JSON.stringify(playlists)); } catch(e) {}
+function saveAlbums(){
+try { localStorage.setItem('cosmos_Albums',JSON.stringify(Albums)); } catch(e) {}
 }
 
-function renderPlaylists(){
-const scroll=document.getElementById('playlistScroll');
-const sidebar=document.getElementById('sidebarPlaylists');
-scroll.innerHTML=playlists.map(pl=>plCard(pl)).join('');
-sidebar.innerHTML=playlists.map(pl=>`
+function renderAlbums(){
+const scroll=document.getElementById('Albumscroll');
+const sidebar=document.getElementById('sidebarAlbums');
+scroll.innerHTML=Albums.map(pl=>plCard(pl)).join('');
+sidebar.innerHTML=Albums.map(pl=>`
    <div class="sidebar-pl-item" onclick="openPlaylistDetail('${pl.id}')">${pl.title}</div>`).join('');
 }
 function plCard(pl){
@@ -1256,7 +1256,7 @@ return`
    ${delBtn}
  </div>`;
 }
-document.getElementById('playlistScroll').addEventListener('click',e=>{
+document.getElementById('Albumscroll').addEventListener('click',e=>{
 const card=e.target.closest('.pl-card');
 if(!card||e.target.classList.contains('pl-delete'))return;
 openPlaylistDetail(card.dataset.id);
@@ -1264,7 +1264,7 @@ openPlaylistDetail(card.dataset.id);
 
 /* PLAYLIST DETAIL */
 async function openPlaylistDetail(id){
-const pl=playlists.find(p=>p.id===id);
+const pl=Albums.find(p=>p.id===id);
 if(!pl)return;
 document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
 document.getElementById('playlistDetailPage').style.display='block';
@@ -1301,17 +1301,17 @@ return`
 }).join('');
 }
 
-document.getElementById('backToPlaylists').addEventListener('click',()=>{
+document.getElementById('backToAlbums').addEventListener('click',()=>{
 document.getElementById('playlistDetailPage').style.display='none';
-showPage('playlists');
+showPage('Albums');
 });
 
 /* DELETE */
 function deletePlaylist(e,id){
 e.stopPropagation();
-playlists=playlists.filter(p=>p.id!==id);
-savePlaylists();
-renderPlaylists();
+Albums=Albums.filter(p=>p.id!==id);
+saveAlbums();
+renderAlbums();
 }
 
 /* CREATE MODAL */
@@ -1355,9 +1355,9 @@ created:Date.now(),
 isDefault:false,
 query:title
 };
-playlists.push(pl);
-savePlaylists();
-renderPlaylists();
+Albums.push(pl);
+saveAlbums();
+renderAlbums();
 document.getElementById('createModal').style.display='none';
 });
 
