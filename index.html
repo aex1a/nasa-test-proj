@@ -8,39 +8,39 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 /* ================================================================
-   ROOT TOKENS
-   ================================================================ */
+  ROOT TOKENS
+  ================================================================ */
 :root {
-  --bg:          #121212;
-  --surface:     #181818;
-  --surface2:    #232323;
-  --surface3:    #2a2a2a;
-  --accent:      #1DB954;
-  --accent-hover:#1ed760;
-  --accent-dim:  rgba(29,185,84,.14);
-  --text:        #FFFFFF;
-  --text2:       #B3B3B3;
-  --text3:       #6b6b6b;
-  --danger:      #e53935;
-  --warn:        #f59b23;
-  --r:           8px;
-  --rL:          12px;
-  --rXL:         20px;
-  --sans:        'Figtree', sans-serif;
-  --serif:       'Playfair Display', serif;
-  --sidebar-w:   240px;
-  --hdr:         64px;
+--bg:          #121212;
+--surface:     #181818;
+--surface2:    #232323;
+--surface3:    #2a2a2a;
+--accent:      #1DB954;
+--accent-hover:#1ed760;
+--accent-dim:  rgba(29,185,84,.14);
+--text:        #FFFFFF;
+--text2:       #B3B3B3;
+--text3:       #6b6b6b;
+--danger:      #e53935;
+--warn:        #f59b23;
+--r:           8px;
+--rL:          12px;
+--rXL:         20px;
+--sans:        'Figtree', sans-serif;
+--serif:       'Playfair Display', serif;
+--sidebar-w:   240px;
+--hdr:         64px;
 }
 
 /* ================================================================
-   RESET
-   ================================================================ */
+  RESET
+  ================================================================ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  background:var(--bg);color:var(--text);
-  font-family:var(--sans);font-size:15px;line-height:1.6;
-  overflow-x:hidden;min-height:100vh;
+background:var(--bg);color:var(--text);
+font-family:var(--sans);font-size:15px;line-height:1.6;
+overflow-x:hidden;min-height:100vh;
 }
 img{max-width:100%;display:block}
 a{color:var(--accent);text-decoration:none}
@@ -48,25 +48,25 @@ button{font-family:var(--sans);cursor:pointer}
 input,textarea{font-family:var(--sans)}
 
 /* ================================================================
-   KEY SCREEN
-   ================================================================ */
+  KEY SCREEN
+  ================================================================ */
 #keyScreen{
-  position:fixed;inset:0;z-index:9999;
-  background:var(--bg);
-  display:flex;align-items:center;justify-content:center;
-  padding:1rem;
+position:fixed;inset:0;z-index:9999;
+background:var(--bg);
+display:flex;align-items:center;justify-content:center;
+padding:1rem;
 }
 .key-box{
-  width:100%;max-width:420px;
-  background:var(--surface);
-  border-radius:var(--rXL);
-  padding:2.5rem 2rem 2rem;
-  text-align:center;
-  animation:fadeUp .4s ease both;
+width:100%;max-width:420px;
+background:var(--surface);
+border-radius:var(--rXL);
+padding:2.5rem 2rem 2rem;
+text-align:center;
+animation:fadeUp .4s ease both;
 }
 .key-wordmark{
-  font-family:var(--serif);font-size:2rem;font-weight:900;
-  letter-spacing:-.03em;margin-bottom:.25rem;
+font-family:var(--serif);font-size:2rem;font-weight:900;
+letter-spacing:-.03em;margin-bottom:.25rem;
 }
 .key-wordmark span{color:var(--accent)}
 .key-tagline{font-size:.82rem;color:var(--text3);margin-bottom:2rem}
@@ -75,874 +75,882 @@ input,textarea{font-family:var(--sans)}
 .key-desc a{color:var(--accent)}
 .key-row{display:flex;gap:8px}
 .key-row input{
-  flex:1;background:var(--surface2);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:var(--r);
-  color:var(--text);padding:.65rem 1rem;
-  font-size:.88rem;outline:none;
-  transition:border-color .2s;
+flex:1;background:var(--surface2);
+border:1px solid rgba(255,255,255,.08);
+border-radius:var(--r);
+color:var(--text);padding:.65rem 1rem;
+font-size:.88rem;outline:none;
+transition:border-color .2s;
 }
 .key-row input:focus{border-color:var(--accent)}
 .btn{
-  background:var(--accent);color:#000;border:none;
-  border-radius:500px;padding:.65rem 1.4rem;
-  font-size:.85rem;font-weight:700;
-  letter-spacing:.02em;
-  transition:background .15s,transform .12s;
-  white-space:nowrap;
+background:var(--accent);color:#000;border:none;
+border-radius:500px;padding:.65rem 1.4rem;
+font-size:.85rem;font-weight:700;
+letter-spacing:.02em;
+transition:background .15s,transform .12s;
+white-space:nowrap;
 }
 .btn:hover{background:var(--accent-hover);transform:scale(1.02)}
 .btn:active{transform:scale(.97)}
 .btn-sm{padding:.5rem 1.1rem;font-size:.8rem}
 .btn-ghost{
-  background:transparent;color:var(--text2);
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:500px;padding:.5rem 1.1rem;
-  font-size:.8rem;font-weight:600;
-  transition:border-color .2s,color .2s;
+background:transparent;color:var(--text2);
+border:1px solid rgba(255,255,255,.15);
+border-radius:500px;padding:.5rem 1.1rem;
+font-size:.8rem;font-weight:600;
+transition:border-color .2s,color .2s;
 }
 .btn-ghost:hover{border-color:rgba(255,255,255,.4);color:var(--text)}
 .key-note{margin-top:1rem;font-size:.72rem;color:var(--text3)}
 
 /* ================================================================
-   APP SHELL
-   ================================================================ */
+  APP SHELL
+  ================================================================ */
 #app{display:none;min-height:100vh}
 
 /* SIDEBAR */
 .sidebar{
-  position:fixed;left:0;top:0;bottom:0;
-  width:var(--sidebar-w);
-  background:#000;
-  display:flex;flex-direction:column;
-  padding:1.5rem 0 1.5rem;
-  z-index:200;
-  overflow:hidden;
+position:fixed;left:0;top:0;bottom:0;
+width:var(--sidebar-w);
+background:#000;
+display:flex;flex-direction:column;
+padding:1.5rem 0 1.5rem;
+z-index:200;
+overflow:hidden;
 }
 .sidebar-logo{
-  font-family:var(--serif);font-size:1.5rem;font-weight:900;
-  letter-spacing:-.03em;padding:0 1.5rem;margin-bottom:2rem;
+font-family:var(--serif);font-size:1.5rem;font-weight:900;
+letter-spacing:-.03em;padding:0 1.5rem;margin-bottom:2rem;
 }
 .sidebar-logo span{color:var(--accent)}
 .nav-section-label{
-  font-size:.68rem;font-weight:700;letter-spacing:.1em;
-  color:var(--text3);text-transform:uppercase;
-  padding:.75rem 1.5rem .4rem;margin-top:.5rem;
+font-size:.68rem;font-weight:700;letter-spacing:.1em;
+color:var(--text3);text-transform:uppercase;
+padding:.75rem 1.5rem .4rem;margin-top:.5rem;
 }
 .nav-item{
-  display:flex;align-items:center;
-  padding:.55rem 1.5rem;
-  font-size:.88rem;font-weight:600;
-  color:var(--text2);
-  cursor:pointer;
-  transition:color .15s;
-  border-radius:0;
-  gap:0;
+display:flex;align-items:center;
+padding:.55rem 1.5rem;
+font-size:.88rem;font-weight:600;
+color:var(--text2);
+cursor:pointer;
+transition:color .15s;
+border-radius:0;
+gap:0;
 }
 .nav-item:hover{color:var(--text)}
 .nav-item.active{color:var(--text)}
 .nav-dot{
-  width:4px;height:4px;border-radius:50%;
-  background:var(--accent);margin-right:.75rem;flex-shrink:0;
-  opacity:0;transition:opacity .15s;
+width:4px;height:4px;border-radius:50%;
+background:var(--accent);margin-right:.75rem;flex-shrink:0;
+opacity:0;transition:opacity .15s;
 }
 .nav-item.active .nav-dot{opacity:1}
 .sidebar-playlists{
-  flex:1;overflow-y:auto;
-  padding:0 1.5rem;margin-top:.5rem;
+flex:1;overflow-y:auto;
+padding:0 1.5rem;margin-top:.5rem;
 }
 .sidebar-playlists::-webkit-scrollbar{width:3px}
 .sidebar-playlists::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px}
 .sidebar-pl-item{
-  font-size:.82rem;color:var(--text3);
-  padding:.35rem 0;cursor:pointer;
-  transition:color .15s;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+font-size:.82rem;color:var(--text3);
+padding:.35rem 0;cursor:pointer;
+transition:color .15s;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .sidebar-pl-item:hover{color:var(--text2)}
 .sidebar-pl-item.active{color:var(--text)}
 
 /* TOPBAR */
 .topbar{
-  position:fixed;top:0;left:var(--sidebar-w);right:0;
-  height:var(--hdr);
-  background:rgba(18,18,18,.92);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 2rem;z-index:100;
-  border-bottom:1px solid rgba(255,255,255,.04);
+position:fixed;top:0;left:var(--sidebar-w);right:0;
+height:var(--hdr);
+background:rgba(18,18,18,.92);
+display:flex;align-items:center;justify-content:space-between;
+padding:0 2rem;z-index:100;
+border-bottom:1px solid rgba(255,255,255,.04);
 }
 .topbar-title{
-  font-family:var(--serif);font-size:1.1rem;font-weight:700;
+font-family:var(--serif);font-size:1.1rem;font-weight:700;
 }
 .topbar-live{
-  display:flex;align-items:center;gap:6px;
-  font-size:.72rem;font-weight:600;color:var(--accent);
-  letter-spacing:.04em;
+display:flex;align-items:center;gap:6px;
+font-size:.72rem;font-weight:600;color:var(--accent);
+letter-spacing:.04em;
 }
 .live-dot{
-  width:6px;height:6px;border-radius:50%;
-  background:var(--accent);
-  animation:pulse 2s infinite;
+width:6px;height:6px;border-radius:50%;
+background:var(--accent);
+animation:pulse 2s infinite;
 }
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* CONTENT */
 .content{
-  margin-left:var(--sidebar-w);
-  padding-top:var(--hdr);
-  min-height:100vh;
+margin-left:var(--sidebar-w);
+padding-top:var(--hdr);
+min-height:100vh;
 }
 .page{
-  display:none;
-  padding:2rem 2.5rem 6rem;
-  max-width:1300px;
-  animation:fadeUp .3s ease both;
+display:none;
+padding:2rem 2.5rem 6rem;
+max-width:1300px;
+animation:fadeUp .3s ease both;
 }
 .page.active{display:block}
 
 @keyframes fadeUp{
-  from{opacity:0;transform:translateY(14px)}
-  to{opacity:1;transform:translateY(0)}
+from{opacity:0;transform:translateY(14px)}
+to{opacity:1;transform:translateY(0)}
 }
 
 /* ================================================================
-   SECTION HEADERS
-   ================================================================ */
+  SECTION HEADERS
+  ================================================================ */
 .sec-head{
-  display:flex;align-items:baseline;justify-content:space-between;
-  margin-bottom:1.25rem;
+display:flex;align-items:baseline;justify-content:space-between;
+margin-bottom:1.25rem;
 }
 .sec-head h2{
-  font-family:var(--serif);font-size:1.6rem;font-weight:700;
-  letter-spacing:-.02em;
+font-family:var(--serif);font-size:1.6rem;font-weight:700;
+letter-spacing:-.02em;
 }
 .sec-head a,.sec-head button.see-all{
-  font-size:.75rem;font-weight:700;color:var(--text3);
-  text-transform:uppercase;letter-spacing:.08em;
-  background:none;border:none;cursor:pointer;
-  transition:color .15s;
+font-size:.75rem;font-weight:700;color:var(--text3);
+text-transform:uppercase;letter-spacing:.08em;
+background:none;border:none;cursor:pointer;
+transition:color .15s;
 }
 .sec-head a:hover,.sec-head button.see-all:hover{color:var(--text)}
 
 /* ================================================================
-   SPINNERS / STATES
-   ================================================================ */
+  SPINNERS / STATES
+  ================================================================ */
 .loader{
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:.75rem;padding:4rem 1rem;
-  color:var(--text3);font-size:.85rem;
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+gap:.75rem;padding:4rem 1rem;
+color:var(--text3);font-size:.85rem;
 }
 .spin{
-  width:28px;height:28px;
-  border:2px solid rgba(255,255,255,.08);
-  border-top-color:var(--accent);
-  border-radius:50%;
-  animation:spin .75s linear infinite;
+width:28px;height:28px;
+border:2px solid rgba(255,255,255,.08);
+border-top-color:var(--accent);
+border-radius:50%;
+animation:spin .75s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 .empty-msg{
-  text-align:center;padding:3.5rem 1rem;
-  color:var(--text3);font-size:.9rem;line-height:1.7;
+text-align:center;padding:3.5rem 1rem;
+color:var(--text3);font-size:.9rem;line-height:1.7;
 }
 .err-banner{
-  background:rgba(229,57,53,.08);
-  border:1px solid rgba(229,57,53,.22);
-  border-radius:var(--r);
-  padding:1rem 1.25rem;
-  color:#ff7070;font-size:.85rem;
+background:rgba(229,57,53,.08);
+border:1px solid rgba(229,57,53,.22);
+border-radius:var(--r);
+padding:1rem 1.25rem;
+color:#ff7070;font-size:.85rem;
 }
 
 /* ================================================================
-   PAGE: HOME — APOD HERO
-   ================================================================ */
+  PAGE: HOME — APOD HERO
+  ================================================================ */
 .apod-hero{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1.75rem;
-  align-items:start;
-  margin-bottom:3rem;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:1.75rem;
+align-items:start;
+margin-bottom:3rem;
 }
 @media(max-width:860px){.apod-hero{grid-template-columns:1fr}}
 .apod-img-wrap{
-  position:relative;border-radius:var(--rL);overflow:hidden;
-  background:var(--surface);aspect-ratio:4/3;
+position:relative;border-radius:var(--rL);overflow:hidden;
+background:var(--surface);aspect-ratio:4/3;
 }
 .apod-img-wrap img{
-  width:100%;height:100%;object-fit:cover;
-  transition:transform .5s ease;
+width:100%;height:100%;object-fit:cover;
+transition:transform .5s ease;
 }
 .apod-img-wrap:hover img{transform:scale(1.04)}
 .apod-date-pill{
-  position:absolute;top:12px;left:12px;
-  background:rgba(0,0,0,.72);
-  color:rgba(255,255,255,.75);
-  font-size:.68rem;font-weight:600;
-  padding:4px 10px;border-radius:500px;
-  letter-spacing:.04em;
+position:absolute;top:12px;left:12px;
+background:rgba(0,0,0,.72);
+color:rgba(255,255,255,.75);
+font-size:.68rem;font-weight:600;
+padding:4px 10px;border-radius:500px;
+letter-spacing:.04em;
 }
 .apod-info{display:flex;flex-direction:column;gap:1rem}
 .apod-info h1{
-  font-family:var(--serif);
-  font-size:clamp(1.5rem,3vw,2.2rem);
-  font-weight:900;line-height:1.15;
-  letter-spacing:-.03em;
+font-family:var(--serif);
+font-size:clamp(1.5rem,3vw,2.2rem);
+font-weight:900;line-height:1.15;
+letter-spacing:-.03em;
 }
 .apod-desc{
-  color:var(--text2);font-size:.9rem;line-height:1.75;
-  display:-webkit-box;-webkit-line-clamp:9;
-  -webkit-box-orient:vertical;overflow:hidden;
+color:var(--text2);font-size:.9rem;line-height:1.75;
+display:-webkit-box;-webkit-line-clamp:9;
+-webkit-box-orient:vertical;overflow:hidden;
 }
 .apod-credit{font-size:.75rem;color:var(--text3);font-weight:500}
 
 /* ================================================================
-   PAGE: HOME — MOON
-   ================================================================ */
+  PAGE: HOME — MOON
+  ================================================================ */
 .moon-wrap{
-  background:var(--surface);
-  border-radius:var(--rXL);
-  padding:2rem;
-  display:grid;
-  grid-template-columns:180px 1fr;
-  gap:2rem;
-  align-items:center;
+background:var(--surface);
+border-radius:var(--rXL);
+padding:2rem;
+display:grid;
+grid-template-columns:180px 1fr;
+gap:2rem;
+align-items:center;
 }
 @media(max-width:700px){.moon-wrap{grid-template-columns:1fr;text-align:center}}
 .moon-sphere-col{display:flex;flex-direction:column;align-items:center;gap:1rem}
 .moon-sphere{
-  width:130px;height:130px;border-radius:50%;
-  position:relative;overflow:hidden;flex-shrink:0;
-  background:#1a1a1a;
+width:130px;height:130px;border-radius:50%;
+background:radial-gradient(circle at 35% 38%, #f0f0f0, #c8c8c8 55%, #888 85%, #555);
+position:relative;overflow:hidden;
+flex-shrink:0;
 }
-.moon-shadow-layer{display:none}
+.moon-shadow-layer{
+position:absolute;inset:0;border-radius:50%;
+background:var(--bg);transition:all .7s ease;
+}
 .moon-name{
-  font-family:var(--serif);font-size:1.1rem;font-weight:700;
-  text-align:center;
+font-family:var(--serif);font-size:1.1rem;font-weight:700;
+text-align:center;
 }
 .moon-sub{font-size:.78rem;color:var(--text2);text-align:center}
 .moon-data{display:flex;flex-direction:column;gap:1.25rem}
 .moon-progress-label{
-  display:flex;justify-content:space-between;
-  font-size:.72rem;font-weight:600;color:var(--text3);
-  text-transform:uppercase;letter-spacing:.07em;
-  margin-bottom:6px;
+display:flex;justify-content:space-between;
+font-size:.72rem;font-weight:600;color:var(--text3);
+text-transform:uppercase;letter-spacing:.07em;
+margin-bottom:6px;
 }
 .track{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
 .track-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .9s ease}
 .track-ends{display:flex;justify-content:space-between;margin-top:4px;font-size:.68rem;color:var(--text3)}
 .phases-row{
-  display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin-top:.25rem;
+display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin-top:.25rem;
 }
 @media(max-width:600px){.phases-row{grid-template-columns:repeat(4,1fr)}}
 .phase-chip{
-  background:var(--surface2);border-radius:var(--r);
-  padding:.45rem .15rem;text-align:center;
-  font-size:.6rem;color:var(--text3);
-  transition:background .2s,color .2s;
+background:var(--surface2);border-radius:var(--r);
+padding:.45rem .15rem;text-align:center;
+font-size:.6rem;color:var(--text3);
+transition:background .2s,color .2s;
 }
 .phase-chip.active{background:var(--accent-dim);color:var(--accent)}
 .phase-chip .pe{display:block;font-size:1.2rem;margin-bottom:2px}
 
 /* ================================================================
-   PAGE: ASTEROIDS
-   ================================================================ */
+  PAGE: ASTEROIDS
+  ================================================================ */
 .neo-stats-row{
-  display:flex;gap:2.5rem;flex-wrap:wrap;margin-bottom:2rem;
-  padding:1.5rem 2rem;background:var(--surface);border-radius:var(--rL);
+display:flex;gap:2.5rem;flex-wrap:wrap;margin-bottom:2rem;
+padding:1.5rem 2rem;background:var(--surface);border-radius:var(--rL);
 }
 .neo-stat{display:flex;flex-direction:column;gap:2px}
 .neo-stat-val{
-  font-family:var(--serif);font-size:2.6rem;font-weight:900;
-  color:var(--accent);line-height:1;
+font-family:var(--serif);font-size:2.6rem;font-weight:900;
+color:var(--accent);line-height:1;
 }
 .neo-stat-val.danger{color:var(--danger)}
 .neo-stat-lbl{font-size:.72rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em}
 .neo-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:1rem;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+gap:1rem;
 }
 .neo-card{
-  background:var(--surface);border-radius:var(--rL);
-  overflow:hidden;cursor:default;
-  transition:background .2s,transform .2s;
+background:var(--surface);border-radius:var(--rL);
+overflow:hidden;cursor:default;
+transition:background .2s,transform .2s;
 }
 .neo-card:hover{background:var(--surface2);transform:translateY(-2px)}
 .neo-card.haz{border-left:3px solid var(--danger)}
 .neo-thumb{
-  height:115px;overflow:hidden;position:relative;
-  background:var(--surface2);
+height:115px;overflow:hidden;position:relative;
+background:var(--surface2);
 }
 .neo-thumb img{width:100%;height:100%;object-fit:cover;opacity:.55;transition:opacity .3s}
 .neo-card:hover .neo-thumb img{opacity:.7}
 .haz-pill{
-  position:absolute;top:10px;right:10px;
-  background:var(--danger);color:#fff;
-  font-size:.62rem;font-weight:700;padding:2px 8px;
-  border-radius:500px;letter-spacing:.04em;
+position:absolute;top:10px;right:10px;
+background:var(--danger);color:#fff;
+font-size:.62rem;font-weight:700;padding:2px 8px;
+border-radius:500px;letter-spacing:.04em;
 }
 .neo-body{padding:1rem}
 .neo-name{font-weight:700;font-size:.92rem;margin-bottom:.6rem}
 .neo-row{
-  display:flex;justify-content:space-between;
-  font-size:.78rem;color:var(--text2);margin-bottom:.28rem;
+display:flex;justify-content:space-between;
+font-size:.78rem;color:var(--text2);margin-bottom:.28rem;
 }
 .neo-row strong{color:var(--text);font-weight:500}
 
 /* ================================================================
-   PAGE: MARS
-   ================================================================ */
+  PAGE: MARS
+  ================================================================ */
 .mars-controls{
-  display:flex;align-items:center;gap:.75rem;
-  flex-wrap:wrap;margin-bottom:1.5rem;
+display:flex;align-items:center;gap:.75rem;
+flex-wrap:wrap;margin-bottom:1.5rem;
 }
 .mars-controls label{font-size:.85rem;color:var(--text2);font-weight:500}
 .mars-controls input[type=number]{
-  background:var(--surface);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:var(--r);color:var(--text);
-  padding:.55rem .9rem;font-size:.88rem;
-  outline:none;width:110px;
-  transition:border-color .2s;
+background:var(--surface);
+border:1px solid rgba(255,255,255,.08);
+border-radius:var(--r);color:var(--text);
+padding:.55rem .9rem;font-size:.88rem;
+outline:none;width:110px;
+transition:border-color .2s;
 }
 .mars-controls input:focus{border-color:var(--accent)}
 .mars-gallery{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(165px,1fr));
-  gap:8px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(165px,1fr));
+gap:8px;
 }
 .mars-photo{
-  position:relative;aspect-ratio:1;
-  border-radius:var(--r);overflow:hidden;
-  background:var(--surface);cursor:pointer;
+position:relative;aspect-ratio:1;
+border-radius:var(--r);overflow:hidden;
+background:var(--surface);cursor:pointer;
 }
 .mars-photo img{
-  width:100%;height:100%;object-fit:cover;
-  transition:transform .35s,filter .35s;
+width:100%;height:100%;object-fit:cover;
+transition:transform .35s,filter .35s;
 }
 .mars-photo:hover img{transform:scale(1.07);filter:brightness(1.1)}
 .mars-label{
-  position:absolute;bottom:0;left:0;right:0;
-  background:linear-gradient(transparent,rgba(0,0,0,.78));
-  padding:.9rem .55rem .45rem;
-  font-size:.62rem;color:rgba(255,255,255,.65);font-weight:500;
+position:absolute;bottom:0;left:0;right:0;
+background:linear-gradient(transparent,rgba(0,0,0,.78));
+padding:.9rem .55rem .45rem;
+font-size:.62rem;color:rgba(255,255,255,.65);font-weight:500;
 }
 
 /* ================================================================
-   PAGE: PLAYLISTS
-   ================================================================ */
+  PAGE: PLAYLISTS
+  ================================================================ */
 .pl-create-bar{
-  display:flex;align-items:center;gap:.75rem;
-  margin-bottom:2rem;flex-wrap:wrap;
+display:flex;align-items:center;gap:.75rem;
+margin-bottom:2rem;flex-wrap:wrap;
 }
 .pl-create-bar input[type=text]{
-  flex:1;min-width:180px;
-  background:var(--surface);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:var(--r);color:var(--text);
-  padding:.6rem 1rem;font-size:.88rem;outline:none;
-  transition:border-color .2s;
+flex:1;min-width:180px;
+background:var(--surface);
+border:1px solid rgba(255,255,255,.08);
+border-radius:var(--r);color:var(--text);
+padding:.6rem 1rem;font-size:.88rem;outline:none;
+transition:border-color .2s;
 }
 .pl-create-bar input:focus{border-color:var(--accent)}
 .pl-scroll{
-  display:flex;gap:1rem;overflow-x:auto;
-  padding-bottom:1rem;
-  scrollbar-width:thin;
-  scrollbar-color:var(--surface3) transparent;
+display:flex;gap:1rem;overflow-x:auto;
+padding-bottom:1rem;
+scrollbar-width:thin;
+scrollbar-color:var(--surface3) transparent;
 }
 .pl-scroll::-webkit-scrollbar{height:4px}
 .pl-scroll::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px}
 .pl-card{
-  flex:0 0 175px;
-  background:var(--surface);border-radius:var(--rL);
-  padding:1rem;cursor:pointer;
-  transition:background .2s;
-  user-select:none;
-  position:relative;
+flex:0 0 175px;
+background:var(--surface);border-radius:var(--rL);
+padding:1rem;cursor:pointer;
+transition:background .2s;
+user-select:none;
+position:relative;
 }
 .pl-card:hover{background:var(--surface2)}
 .pl-cover{
-  width:100%;aspect-ratio:1;border-radius:var(--r);
-  overflow:hidden;margin-bottom:.85rem;position:relative;
-  background:var(--surface2);
+width:100%;aspect-ratio:1;border-radius:var(--r);
+overflow:hidden;margin-bottom:.85rem;position:relative;
+background:var(--surface2);
 }
 .pl-cover img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
 .pl-card:hover .pl-cover img{transform:scale(1.04)}
 .pl-play-btn{
-  position:absolute;bottom:8px;right:8px;
-  width:38px;height:38px;background:var(--accent);
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-  opacity:0;transform:translateY(6px);
-  transition:opacity .2s,transform .2s;
-  box-shadow:0 4px 20px rgba(0,0,0,.5);
+position:absolute;bottom:8px;right:8px;
+width:38px;height:38px;background:var(--accent);
+border-radius:50%;display:flex;align-items:center;justify-content:center;
+opacity:0;transform:translateY(6px);
+transition:opacity .2s,transform .2s;
+box-shadow:0 4px 20px rgba(0,0,0,.5);
 }
 .pl-play-btn svg{width:16px;height:16px;fill:#000;margin-left:2px}
 .pl-card:hover .pl-play-btn{opacity:1;transform:translateY(0)}
 .pl-title{font-weight:700;font-size:.88rem;margin-bottom:3px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pl-desc{font-size:.73rem;color:var(--text2);
-  display:-webkit-box;-webkit-line-clamp:2;
-  -webkit-box-orient:vertical;overflow:hidden;line-height:1.45}
+display:-webkit-box;-webkit-line-clamp:2;
+-webkit-box-orient:vertical;overflow:hidden;line-height:1.45}
 .pl-delete{
-  position:absolute;top:8px;right:8px;
-  background:rgba(0,0,0,.6);color:var(--text2);
-  border:none;border-radius:50%;
-  width:24px;height:24px;font-size:.8rem;
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;transition:opacity .2s;cursor:pointer;
+position:absolute;top:8px;right:8px;
+background:rgba(0,0,0,.6);color:var(--text2);
+border:none;border-radius:50%;
+width:24px;height:24px;font-size:.8rem;
+display:flex;align-items:center;justify-content:center;
+opacity:0;transition:opacity .2s;cursor:pointer;
 }
 .pl-card:hover .pl-delete{opacity:1}
 .pl-delete:hover{color:var(--danger);background:rgba(0,0,0,.8)}
 
 /* ================================================================
-   PLAYLIST DETAIL PAGE
-   ================================================================ */
+  PLAYLIST DETAIL PAGE
+  ================================================================ */
 #playlistDetailPage{padding:2rem 2.5rem 6rem}
 .pl-detail-hero{
-  display:flex;align-items:flex-end;gap:2rem;
-  margin-bottom:2rem;
-  background:linear-gradient(to bottom, var(--surface2), var(--surface));
-  padding:2rem;border-radius:var(--rXL);
+display:flex;align-items:flex-end;gap:2rem;
+margin-bottom:2rem;
+background:linear-gradient(to bottom, var(--surface2), var(--surface));
+padding:2rem;border-radius:var(--rXL);
 }
 .pl-detail-cover{
-  width:180px;height:180px;flex-shrink:0;
-  border-radius:var(--rL);overflow:hidden;
-  background:var(--surface3);
-  box-shadow:0 8px 32px rgba(0,0,0,.5);
+width:180px;height:180px;flex-shrink:0;
+border-radius:var(--rL);overflow:hidden;
+background:var(--surface3);
+box-shadow:0 8px 32px rgba(0,0,0,.5);
 }
 .pl-detail-cover img{width:100%;height:100%;object-fit:cover}
 .pl-detail-meta h1{
-  font-family:var(--serif);font-size:2rem;font-weight:900;
-  letter-spacing:-.03em;line-height:1.1;margin-bottom:.5rem;
+font-family:var(--serif);font-size:2rem;font-weight:900;
+letter-spacing:-.03em;line-height:1.1;margin-bottom:.5rem;
 }
 .pl-detail-meta p{font-size:.88rem;color:var(--text2);margin-bottom:1rem}
 .pl-detail-meta small{font-size:.75rem;color:var(--text3)}
 .pl-content-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(165px,1fr));
-  gap:8px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(165px,1fr));
+gap:8px;
 }
 @media(max-width:600px){
-  .pl-detail-hero{flex-direction:column}
-  .pl-detail-cover{width:140px;height:140px}
+.pl-detail-hero{flex-direction:column}
+.pl-detail-cover{width:140px;height:140px}
 }
 
 /* ================================================================
-   CREATE PLAYLIST MODAL
-   ================================================================ */
+  CREATE PLAYLIST MODAL
+  ================================================================ */
 .modal-overlay{
-  position:fixed;inset:0;z-index:5000;
-  background:rgba(0,0,0,.72);
-  display:flex;align-items:center;justify-content:center;
-  padding:1rem;
+position:fixed;inset:0;z-index:5000;
+background:rgba(0,0,0,.72);
+display:flex;align-items:center;justify-content:center;
+padding:1rem;
 }
 .modal-box{
-  background:var(--surface);border-radius:var(--rXL);
-  padding:2rem;width:100%;max-width:440px;
-  animation:fadeUp .3s ease both;
+background:var(--surface);border-radius:var(--rXL);
+padding:2rem;width:100%;max-width:440px;
+animation:fadeUp .3s ease both;
 }
 .modal-box h3{
-  font-family:var(--serif);font-size:1.4rem;font-weight:700;
-  margin-bottom:1.25rem;
+font-family:var(--serif);font-size:1.4rem;font-weight:700;
+margin-bottom:1.25rem;
 }
 .form-group{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem}
 .form-group label{font-size:.78rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
 .form-group input[type=text],
 .form-group textarea{
-  background:var(--surface2);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:var(--r);color:var(--text);
-  padding:.6rem .9rem;font-size:.88rem;outline:none;
-  transition:border-color .2s;resize:none;
+background:var(--surface2);
+border:1px solid rgba(255,255,255,.08);
+border-radius:var(--r);color:var(--text);
+padding:.6rem .9rem;font-size:.88rem;outline:none;
+transition:border-color .2s;resize:none;
 }
 .form-group input:focus,.form-group textarea:focus{border-color:var(--accent)}
 .cover-upload-area{
-  border:2px dashed rgba(255,255,255,.1);
-  border-radius:var(--r);padding:1.5rem;
-  text-align:center;cursor:pointer;
-  transition:border-color .2s;position:relative;
-  overflow:hidden;
+border:2px dashed rgba(255,255,255,.1);
+border-radius:var(--r);padding:1.5rem;
+text-align:center;cursor:pointer;
+transition:border-color .2s;position:relative;
+overflow:hidden;
 }
 .cover-upload-area:hover{border-color:rgba(255,255,255,.25)}
 .cover-upload-area img{
-  width:100%;max-height:140px;object-fit:cover;
-  border-radius:var(--r);margin-bottom:.5rem;
+width:100%;max-height:140px;object-fit:cover;
+border-radius:var(--r);margin-bottom:.5rem;
 }
 .cover-upload-area input[type=file]{
-  position:absolute;inset:0;opacity:0;cursor:pointer;
+position:absolute;inset:0;opacity:0;cursor:pointer;
 }
 .cover-upload-label{font-size:.8rem;color:var(--text3)}
 .modal-actions{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.25rem}
 
 /* ================================================================
-   LIGHTBOX
-   ================================================================ */
+  LIGHTBOX
+  ================================================================ */
 .lightbox{
-  position:fixed;inset:0;z-index:8000;
-  background:rgba(0,0,0,.88);
-  display:none;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:1rem;padding:2rem;
+position:fixed;inset:0;z-index:8000;
+background:rgba(0,0,0,.88);
+display:none;flex-direction:column;
+align-items:center;justify-content:center;
+gap:1rem;padding:2rem;
 }
 .lightbox.open{display:flex}
 .lightbox img{max-height:80vh;max-width:90vw;border-radius:var(--rL)}
 .lb-close{
-  position:absolute;top:1.5rem;right:2rem;
-  background:var(--surface);color:var(--text);
-  border:none;border-radius:50%;
-  width:36px;height:36px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:1.1rem;
-  transition:background .2s;
+position:absolute;top:1.5rem;right:2rem;
+background:var(--surface);color:var(--text);
+border:none;border-radius:50%;
+width:36px;height:36px;
+display:flex;align-items:center;justify-content:center;
+cursor:pointer;font-size:1.1rem;
+transition:background .2s;
 }
 .lb-close:hover{background:var(--surface2)}
 .lb-caption{font-size:.8rem;color:var(--text2);text-align:center}
 
 /* ================================================================
-   MOBILE NAV (bottom bar on small screens)
-   ================================================================ */
+  MOBILE NAV (bottom bar on small screens)
+  ================================================================ */
 @media(max-width:768px){
-  .sidebar{display:none}
-  .topbar{left:0}
-  .content{margin-left:0}
-  .page,.page.active{padding:1.5rem 1rem 5rem}
-  #playlistDetailPage{padding:1.5rem 1rem 5rem}
-  .bottom-nav{
-    display:flex;
-    position:fixed;bottom:0;left:0;right:0;
-    background:#000;border-top:1px solid rgba(255,255,255,.06);
-    z-index:200;
-  }
-  .bottom-nav-item{
-    flex:1;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;
-    padding:.65rem .5rem;
-    font-size:.62rem;font-weight:600;color:var(--text3);
-    cursor:pointer;transition:color .15s;
-    background:none;border:none;
-    gap:4px;
-  }
-  .bottom-nav-item.active{color:var(--text)}
-  .bottom-nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:0}
-  .bottom-nav-item.active .bottom-nav-dot{opacity:1}
+.sidebar{display:none}
+.topbar{left:0}
+.content{margin-left:0}
+.page,.page.active{padding:1.5rem 1rem 5rem}
+#playlistDetailPage{padding:1.5rem 1rem 5rem}
+.bottom-nav{
+display:flex;
+position:fixed;bottom:0;left:0;right:0;
+background:#000;border-top:1px solid rgba(255,255,255,.06);
+z-index:200;
+}
+.bottom-nav-item{
+flex:1;display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+padding:.65rem .5rem;
+font-size:.62rem;font-weight:600;color:var(--text3);
+cursor:pointer;transition:color .15s;
+background:none;border:none;
+gap:4px;
+}
+.bottom-nav-item.active{color:var(--text)}
+.bottom-nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:0}
+.bottom-nav-item.active .bottom-nav-dot{opacity:1}
 }
 @media(min-width:769px){
-  .bottom-nav{display:none}
+.bottom-nav{display:none}
 }
 
 /* ================================================================
-   SCROLLBAR GLOBAL
-   ================================================================ */
+  SCROLLBAR GLOBAL
+  ================================================================ */
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px}
 
 /* ================================================================
-   CONTENT SECTIONS SEPARATION
-   ================================================================ */
+  CONTENT SECTIONS SEPARATION
+  ================================================================ */
 .section-gap{margin-bottom:3rem}
 </style>
 </head>
 <body>
 
 <div id="keyScreen">
-  <div class="key-box">
-    <div class="key-wordmark">Cosmos<span>.</span></div>
-    <div class="key-tagline">Your universe, beautifully organized</div>
-    <h2>Enter your NASA API Key</h2>
-    <p class="key-desc">
-      Get a free key at <a href="https://api.nasa.gov" target="_blank">api.nasa.gov</a>,
-      or type <strong>DEMO_KEY</strong> to explore with limited requests.
-    </p>
-    <div class="key-row">
-      <input type="text" id="keyInput" placeholder="DEMO_KEY or your key…"/>
-      <button class="btn" id="keyBtn">Launch</button>
-    </div>
-    <p class="key-note">Stored locally only. Never shared or transmitted.</p>
-  </div>
+<div class="key-box">
+<div class="key-wordmark">Cosmos<span>.</span></div>
+<div class="key-tagline">Your universe, beautifully organized</div>
+<h2>Enter your NASA API Key</h2>
+<p class="key-desc">
+Get a free key at <a href="https://api.nasa.gov" target="_blank">api.nasa.gov</a>,
+or type <strong>DEMO_KEY</strong> to explore with limited requests.
+</p>
+<div class="key-row">
+<input type="text" id="keyInput" placeholder="DEMO_KEY or your key…"/>
+<button class="btn" id="keyBtn">Launch</button>
+</div>
+<p class="key-note">Stored locally only. Never shared or transmitted.</p>
+</div>
 </div>
 
 <div id="app">
 
-  <nav class="sidebar">
-    <div class="sidebar-logo">Cosmos<span>.</span></div>
-    <div class="nav-section-label">Explore</div>
-    <div class="nav-item active" data-page="home"><span class="nav-dot"></span>Today in Space</div>
-    <div class="nav-item" data-page="moon"><span class="nav-dot"></span>Moon Cycle</div>
-    <div class="nav-item" data-page="asteroids"><span class="nav-dot"></span>Asteroids</div>
-    <div class="nav-item" data-page="mars"><span class="nav-dot"></span>Mars Gallery</div>
-    <div class="nav-section-label">Your Library</div>
-    <div class="nav-item" data-page="playlists"><span class="nav-dot"></span>Space Playlists</div>
-    <div class="nav-section-label" style="margin-top:.5rem">Playlists</div>
-    <div class="sidebar-playlists" id="sidebarPlaylists"></div>
-  </nav>
+<nav class="sidebar">
+<div class="sidebar-logo">Cosmos<span>.</span></div>
+<div class="nav-section-label">Explore</div>
+<div class="nav-item active" data-page="home"><span class="nav-dot"></span>Today in Space</div>
+<div class="nav-item" data-page="moon"><span class="nav-dot"></span>Moon Cycle</div>
+<div class="nav-item" data-page="asteroids"><span class="nav-dot"></span>Asteroids</div>
+<div class="nav-item" data-page="mars"><span class="nav-dot"></span>Mars Gallery</div>
+<div class="nav-section-label">Your Library</div>
+<div class="nav-item" data-page="playlists"><span class="nav-dot"></span>Space Playlists</div>
+<div class="nav-section-label" style="margin-top:.5rem">Playlists</div>
+<div class="sidebar-playlists" id="sidebarPlaylists"></div>
+</nav>
 
-  <div class="topbar">
-    <div class="topbar-title" id="topbarTitle">Today in Space</div>
-    <div class="topbar-live">
-      <span class="live-dot"></span>
-      NASA Live Data
-    </div>
-  </div>
+<div class="topbar">
+<div class="topbar-title" id="topbarTitle">Today in Space</div>
+<div class="topbar-live">
+<span class="live-dot"></span>
+NASA Live Data
+</div>
+</div>
 
-  <div class="content">
+<div class="content">
 
-    <div class="page active" id="page-home">
+<div class="page active" id="page-home">
 
-      <div class="section-gap">
-        <div class="sec-head"><h2>Today's Sky</h2></div>
-        <div id="apodSection">
-          <div class="loader"><div class="spin"></div><span>Loading today's image…</span></div>
-        </div>
-      </div>
+<div class="section-gap">
+<div class="sec-head"><h2>Today's Sky</h2></div>
+<div id="apodSection">
+<div class="loader"><div class="spin"></div><span>Loading today's image…</span></div>
+</div>
+</div>
 
-      <div class="section-gap">
-        <div class="sec-head"><h2>Moon Tonight</h2></div>
-        <div id="moonSection">
-          <div class="loader"><div class="spin"></div><span>Calculating phase…</span></div>
-        </div>
-      </div>
+<div class="section-gap">
+<div class="sec-head"><h2>Moon Tonight</h2></div>
+<div id="moonSection">
+<div class="loader"><div class="spin"></div><span>Calculating phase…</span></div>
+</div>
+</div>
 
-    </div>
+</div>
 
-    <div class="page" id="page-moon">
-      <div class="sec-head"><h2>Lunar Cycle Tracker</h2></div>
-      <div id="moonPageSection">
-        <div class="loader"><div class="spin"></div><span>Loading…</span></div>
-      </div>
-    </div>
+<div class="page" id="page-moon">
+<div class="sec-head"><h2>Lunar Cycle Tracker</h2></div>
+<div id="moonPageSection">
+<div class="loader"><div class="spin"></div><span>Loading…</span></div>
+</div>
+</div>
 
-    <div class="page" id="page-asteroids">
-      <div class="sec-head"><h2>Asteroids Passing Earth</h2></div>
-      <div id="neoSection">
-        <div class="loader"><div class="spin"></div><span>Scanning near-Earth space…</span></div>
-      </div>
-    </div>
+<div class="page" id="page-asteroids">
+<div class="sec-head"><h2>Asteroids Passing Earth</h2></div>
+<div id="neoSection">
+<div class="loader"><div class="spin"></div><span>Scanning near-Earth space…</span></div>
+</div>
+</div>
 
-    <div class="page" id="page-mars">
-      <div class="sec-head"><h2>Mars Rover Gallery</h2></div>
-      <div class="mars-controls">
-        <label for="solInput">Martian Day (Sol)</label>
-        <input type="number" id="solInput" value="3500" min="1" max="5000"/>
-        <button class="btn btn-sm" id="solBtn">Browse Photos</button>
-      </div>
-      <div id="marsSection">
-        <div class="loader"><div class="spin"></div><span>Receiving signals from Mars…</span></div>
-      </div>
-    </div>
+<div class="page" id="page-mars">
+<div class="sec-head"><h2>Mars Rover Gallery</h2></div>
+<div class="mars-controls">
+<label for="solInput">Martian Day (Sol)</label>
+<input type="number" id="solInput" value="3500" min="1" max="5000"/>
+<button class="btn btn-sm" id="solBtn">Browse Photos</button>
+</div>
+<div id="marsSection">
+<div class="loader"><div class="spin"></div><span>Receiving signals from Mars…</span></div>
+</div>
+</div>
 
-    <div class="page" id="page-playlists">
-      <div class="sec-head">
-        <h2>Space Playlists</h2>
-        <button class="btn btn-sm" id="openCreateModal">Create Playlist</button>
-      </div>
-      <div class="pl-scroll" id="playlistScroll"></div>
-    </div>
+<div class="page" id="page-playlists">
+<div class="sec-head">
+<h2>Space Playlists</h2>
+<button class="btn btn-sm" id="openCreateModal">Create Playlist</button>
+</div>
+<div class="pl-scroll" id="playlistScroll"></div>
+</div>
 
-    <div id="playlistDetailPage" style="display:none;padding-top:calc(var(--hdr) + 1rem)">
-      <button class="btn-ghost" id="backToPlaylists" style="margin-bottom:1.5rem">← Back</button>
-      <div class="pl-detail-hero">
-        <div class="pl-detail-cover"><img id="detailCoverImg" src="" alt=""/></div>
-        <div class="pl-detail-meta">
-          <p style="font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:.4rem">Playlist</p>
-          <h1 id="detailTitle"></h1>
-          <p id="detailDesc"></p>
-          <small id="detailMeta"></small>
-        </div>
-      </div>
-      <div class="sec-head" style="margin-top:1.5rem"><h2>Space Photos</h2></div>
-      <div id="detailContent" class="pl-content-grid">
-        <div class="loader"><div class="spin"></div><span>Loading…</span></div>
-      </div>
-    </div>
+<div id="playlistDetailPage" style="display:none;padding-top:calc(var(--hdr) + 1rem)">
+<button class="btn-ghost" id="backToPlaylists" style="margin-bottom:1.5rem">← Back</button>
+<div class="pl-detail-hero">
+<div class="pl-detail-cover"><img id="detailCoverImg" src="" alt=""/></div>
+<div class="pl-detail-meta">
+<p style="font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:.4rem">Playlist</p>
+<h1 id="detailTitle"></h1>
+<p id="detailDesc"></p>
+<small id="detailMeta"></small>
+</div>
+</div>
+<div class="sec-head" style="margin-top:1.5rem"><h2>Space Photos</h2></div>
+<div id="detailContent" class="pl-content-grid">
+<div class="loader"><div class="spin"></div><span>Loading…</span></div>
+</div>
+</div>
 
-  </div><div class="bottom-nav">
-    <button class="bottom-nav-item active" data-page="home">
-      <span class="bottom-nav-dot"></span>Today
-    </button>
-    <button class="bottom-nav-item" data-page="moon">
-      <span class="bottom-nav-dot"></span>Moon
-    </button>
-    <button class="bottom-nav-item" data-page="asteroids">
-      <span class="bottom-nav-dot"></span>Asteroids
-    </button>
-    <button class="bottom-nav-item" data-page="mars">
-      <span class="bottom-nav-dot"></span>Mars
-    </button>
-    <button class="bottom-nav-item" data-page="playlists">
-      <span class="bottom-nav-dot"></span>Playlists
-    </button>
-  </div>
+</div><div class="bottom-nav">
+<button class="bottom-nav-item active" data-page="home">
+<span class="bottom-nav-dot"></span>Today
+</button>
+<button class="bottom-nav-item" data-page="moon">
+<span class="bottom-nav-dot"></span>Moon
+</button>
+<button class="bottom-nav-item" data-page="asteroids">
+<span class="bottom-nav-dot"></span>Asteroids
+</button>
+<button class="bottom-nav-item" data-page="mars">
+<span class="bottom-nav-dot"></span>Mars
+</button>
+<button class="bottom-nav-item" data-page="playlists">
+<span class="bottom-nav-dot"></span>Playlists
+</button>
+</div>
 
 </div><div class="modal-overlay" id="createModal" style="display:none">
-  <div class="modal-box">
-    <h3>Create Playlist</h3>
-    <div class="form-group">
-      <label>Playlist Title</label>
-      <input type="text" id="plTitle" placeholder="e.g. Asteroid Drift"/>
-    </div>
-    <div class="form-group">
-      <label>Description</label>
-      <textarea id="plDesc" rows="2" placeholder="What's this playlist about?"></textarea>
-    </div>
-    <div class="form-group">
-      <label>Cover Image</label>
-      <div class="cover-upload-area" id="coverUploadArea">
-        <input type="file" id="coverFileInput" accept="image/*"/>
-        <img id="coverPreview" src="" alt="" style="display:none"/>
-        <div class="cover-upload-label" id="coverUploadLabel">Click to upload a cover image</div>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-ghost" id="cancelModal">Cancel</button>
-      <button class="btn" id="savePlaylist">Save Playlist</button>
-    </div>
-  </div>
+<div class="modal-box">
+<h3>Create Playlist</h3>
+<div class="form-group">
+<label>Playlist Title</label>
+<input type="text" id="plTitle" placeholder="e.g. Asteroid Drift"/>
+</div>
+<div class="form-group">
+<label>Description</label>
+<textarea id="plDesc" rows="2" placeholder="What's this playlist about?"></textarea>
+</div>
+<div class="form-group">
+<label>Cover Image</label>
+<div class="cover-upload-area" id="coverUploadArea">
+<input type="file" id="coverFileInput" accept="image/*"/>
+<img id="coverPreview" src="" alt="" style="display:none"/>
+<div class="cover-upload-label" id="coverUploadLabel">Click to upload a cover image</div>
+</div>
+</div>
+<div class="modal-actions">
+<button class="btn-ghost" id="cancelModal">Cancel</button>
+<button class="btn" id="savePlaylist">Save Playlist</button>
+</div>
+</div>
 </div>
 
 <div class="lightbox" id="lightbox">
-  <button class="lb-close" id="lbClose">&#x2715;</button>
-  <img id="lbImg" src="" alt=""/>
-  <p class="lb-caption" id="lbCaption"></p>
+<button class="lb-close" id="lbClose">&#x2715;</button>
+<img id="lbImg" src="" alt=""/>
+<p class="lb-caption" id="lbCaption"></p>
 </div>
 
 <script>
 /* ============================================================
-   CONFIG & STATE
-   ============================================================ */
+  CONFIG & STATE
+  ============================================================ */
 const NASA = 'https://api.nasa.gov';
 let API_KEY = '';
 let playlists = [];
 let moonData = null; 
 const ASTEROID_BG = [
-  'https://images-assets.nasa.gov/image/PIA20180/PIA20180~thumb.jpg',
-  'https://images-assets.nasa.gov/image/PIA17034/PIA17034~thumb.jpg',
-  'https://images-assets.nasa.gov/image/PIA21471/PIA21471~thumb.jpg',
-  'https://images-assets.nasa.gov/image/PIA22567/PIA22567~thumb.jpg',
-  'https://images-assets.nasa.gov/image/PIA24307/PIA24307~thumb.jpg',
-  'https://images-assets.nasa.gov/image/PIA20188/PIA20188~thumb.jpg',
+'https://images-assets.nasa.gov/image/PIA20180/PIA20180~thumb.jpg',
+'https://images-assets.nasa.gov/image/PIA17034/PIA17034~thumb.jpg',
+'https://images-assets.nasa.gov/image/PIA21471/PIA21471~thumb.jpg',
+'https://images-assets.nasa.gov/image/PIA22567/PIA22567~thumb.jpg',
+'https://images-assets.nasa.gov/image/PIA24307/PIA24307~thumb.jpg',
+'https://images-assets.nasa.gov/image/PIA20188/PIA20188~thumb.jpg',
 ];
 const DEFAULT_PLAYLISTS = [
-  {
-    id:'pl-1',title:'Asteroid Drift',
-    desc:'Float through the belt. Deep drones and cosmic silence.',
-    cover:'https://images-assets.nasa.gov/image/PIA20180/PIA20180~thumb.jpg',
-    created:Date.now()-86400000*3,
-    isDefault:true,query:'asteroid'
-  },
-  {
-    id:'pl-2',title:'Moonlight Signals',
-    desc:'Transmissions from the lunar surface. Ambient and still.',
-    cover:'https://images-assets.nasa.gov/image/AS11-44-6549/AS11-44-6549~thumb.jpg',
-    created:Date.now()-86400000*2,
-    isDefault:true,query:'moon'
-  },
-  {
-    id:'pl-3',title:'Orbit Dreams',
-    desc:'Weightless hours above Earth. Watch the planet spin below.',
-    cover:'https://images-assets.nasa.gov/image/iss040e081320/iss040e081320~thumb.jpg',
-    created:Date.now()-86400000,
-    isDefault:true,query:'earth orbit'
-  },
-  {
-    id:'pl-4',title:'Mars Night Drive',
-    desc:'Dust storms and red horizons. The long drive home.',
-    cover:'https://images-assets.nasa.gov/image/PIA24307/PIA24307~thumb.jpg',
-    created:Date.now(),
-    isDefault:true,query:'mars'
-  },
+{
+id:'pl-1',title:'Asteroid Drift',
+desc:'Float through the belt. Deep drones and cosmic silence.',
+cover:'https://images-assets.nasa.gov/image/PIA20180/PIA20180~thumb.jpg',
+created:Date.now()-86400000*3,
+isDefault:true,query:'asteroid'
+},
+{
+id:'pl-2',title:'Moonlight Signals',
+desc:'Transmissions from the lunar surface. Ambient and still.',
+cover:'https://images-assets.nasa.gov/image/AS11-44-6549/AS11-44-6549~thumb.jpg',
+created:Date.now()-86400000*2,
+isDefault:true,query:'moon'
+},
+{
+id:'pl-3',title:'Orbit Dreams',
+desc:'Weightless hours above Earth. Watch the planet spin below.',
+cover:'https://images-assets.nasa.gov/image/iss040e081320/iss040e081320~thumb.jpg',
+created:Date.now()-86400000,
+isDefault:true,query:'earth orbit'
+},
+{
+id:'pl-4',title:'Mars Night Drive',
+desc:'Dust storms and red horizons. The long drive home.',
+cover:'https://images-assets.nasa.gov/image/PIA24307/PIA24307~thumb.jpg',
+created:Date.now(),
+isDefault:true,query:'mars'
+},
 ];
 const PAGE_TITLES = {
-  home:'Today in Space',moon:'Moon Cycle',
-  asteroids:'Asteroids',mars:'Mars Gallery',playlists:'Space Playlists'
+home:'Today in Space',moon:'Moon Cycle',
+asteroids:'Asteroids',mars:'Mars Gallery',playlists:'Space Playlists'
 };
 
 /* ============================================================
-   BOOT
-   ============================================================ */
+  BOOT
+  ============================================================ */
 let savedKey = '';
 try {
-  savedKey = localStorage.getItem('cosmos_api_key');
+savedKey = localStorage.getItem('cosmos_api_key');
 } catch(e) {}
 
 if(savedKey){API_KEY=savedKey;bootApp()}
 
 document.getElementById('keyBtn').addEventListener('click',()=>{
-  const v=document.getElementById('keyInput').value.trim();
-  if(!v){document.getElementById('keyInput').style.borderColor='#e53935';return}
-  API_KEY=v;
-  try { localStorage.setItem('cosmos_api_key',API_KEY); } catch(e) {}
-  bootApp();
+const v=document.getElementById('keyInput').value.trim();
+if(!v){document.getElementById('keyInput').style.borderColor='#e53935';return}
+API_KEY=v;
+try { localStorage.setItem('cosmos_api_key',API_KEY); } catch(e) {}
+bootApp();
 });
 
 document.getElementById('keyInput').addEventListener('keydown',e=>{
-  if(e.key==='Enter')document.getElementById('keyBtn').click();
+if(e.key==='Enter')document.getElementById('keyBtn').click();
 });
 
 function bootApp(){
-  document.getElementById('keyScreen').style.display='none';
-  document.getElementById('app').style.display='block';
-  loadPlaylists();
-  fetchAPOD();
-  fetchNEO();
-  fetchMarsWithFallback(3500);
-  renderPlaylists();
-  initNav();
+document.getElementById('keyScreen').style.display='none';
+document.getElementById('app').style.display='block';
+loadPlaylists();
+fetchAPOD();
+fetchNEO();
+fetchMarsWithFallback(3500);
+renderPlaylists();
+initNav();
 }
 
 /* ============================================================
-   NAVIGATION
-   ============================================================ */
+  NAVIGATION
+  ============================================================ */
 let currentPage='home';
 function initNav(){
-  document.querySelectorAll('.nav-item[data-page]').forEach(el=>{
-    el.addEventListener('click',()=>showPage(el.dataset.page));
-  });
-  document.querySelectorAll('.bottom-nav-item[data-page]').forEach(el=>{
-    el.addEventListener('click',()=>showPage(el.dataset.page));
-  });
+document.querySelectorAll('.nav-item[data-page]').forEach(el=>{
+el.addEventListener('click',()=>showPage(el.dataset.page));
+});
+document.querySelectorAll('.bottom-nav-item[data-page]').forEach(el=>{
+el.addEventListener('click',()=>showPage(el.dataset.page));
+});
 }
 function showPage(name){
-  document.getElementById('playlistDetailPage').style.display='none';
-  document.querySelectorAll('.nav-item[data-page]').forEach(el=>{
-    el.classList.toggle('active',el.dataset.page===name);
-  });
-  document.querySelectorAll('.bottom-nav-item[data-page]').forEach(el=>{
-    el.classList.toggle('active',el.dataset.page===name);
-  });
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const pg=document.getElementById('page-'+name);
-  if(pg)pg.classList.add('active');
-  document.getElementById('topbarTitle').textContent=PAGE_TITLES[name]||name;
-  currentPage=name;
-  if(name==='moon'&&moonData)renderMoonFull(moonData,document.getElementById('moonPageSection'));
+document.getElementById('playlistDetailPage').style.display='none';
+document.querySelectorAll('.nav-item[data-page]').forEach(el=>{
+el.classList.toggle('active',el.dataset.page===name);
+});
+document.querySelectorAll('.bottom-nav-item[data-page]').forEach(el=>{
+el.classList.toggle('active',el.dataset.page===name);
+});
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+const pg=document.getElementById('page-'+name);
+if(pg)pg.classList.add('active');
+document.getElementById('topbarTitle').textContent=PAGE_TITLES[name]||name;
+currentPage=name;
+if(name==='moon'&&moonData)renderMoonFull(moonData,document.getElementById('moonPageSection'));
 }
 
 /* ============================================================
-   UTILS
-   ============================================================ */
+  UTILS
+  ============================================================ */
 async function apiFetch(url){
-  try{
-    const r=await fetch(url);
-    const d=await r.json().catch(()=>({}));
-    return{ok:r.ok,status:r.status,data:d};
-  }catch(e){return{ok:false,status:0,data:{}}}
+try{
+const r=await fetch(url);
+const d=await r.json().catch(()=>({}));
+return{ok:r.ok,status:r.status,data:d};
+}catch(e){return{ok:false,status:0,data:{}}}
 }
 function todayStr(){
-  const d=new Date();
-  return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
+const d=new Date();
+return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
 }
 function formatDate(str){
-  if(!str)return '';
-  const d=new Date(str+'T12:00:00Z');
-  return d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+if(!str)return '';
+const d=new Date(str+'T12:00:00Z');
+return d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
 }
 
 /* ============================================================
-   APOD
-   ============================================================ */
+  APOD
+  ============================================================ */
 async function fetchAPOD(){
-  const sec=document.getElementById('apodSection');
+const sec=document.getElementById('apodSection');
+  const{ok,data}=await apiFetch(`${NASA}/planetary/apod?api_key=${API_KEY}`);
+  if(!ok){
+    sec.innerHTML=`<div class="err-banner">Couldn't load today's image. Check your API key or try again later.</div>`;
+    renderMoon(new Date(),document.getElementById('moonSection'));
 
   /* Try today first, then fall back to previous days (handles DEMO_KEY rate limits) */
   let apodData=null;
@@ -973,473 +981,400 @@ async function fetchAPOD(){
       </div>`;
     moonData=new Date();
     renderMoon(moonData,moonContainer);
-    return;
-  }
+return;
+}
+  renderAPOD(data,sec);
+  const d=data.date?new Date(data.date+'T12:00:00Z'):new Date();
 
   renderAPOD(apodData,sec);
   const d=apodData.date?new Date(apodData.date+'T12:00:00Z'):new Date();
-  moonData=d;
+moonData=d;
+  renderMoon(d,document.getElementById('moonSection'));
   renderMoon(d,moonContainer);
-  if(currentPage==='moon')renderMoonFull(d,document.getElementById('moonPageSection'));
+if(currentPage==='moon')renderMoonFull(d,document.getElementById('moonPageSection'));
 }
 function renderAPOD(data,sec){
-  const isImg=data.media_type==='image';
-  sec.innerHTML=`
-    <div class="apod-hero">
-      <div class="apod-img-wrap">
-        ${isImg
-          ?`<img src="${data.hdurl||data.url}" alt="${data.title||''}" loading="lazy"/>`
-          :`<div style="display:flex;align-items:center;justify-content:center;height:100%;min-height:260px;color:var(--text3);font-size:.9rem">Video — view on NASA</div>`
-        }
-        <div class="apod-date-pill">${formatDate(data.date)}</div>
-      </div>
-      <div class="apod-info">
-        <h1>${data.title||'Untitled'}</h1>
-        <p class="apod-desc">${data.explanation||''}</p>
-        <p class="apod-credit">${data.copyright?'Photo by '+data.copyright.replace(/\n/g,' '):'NASA — Public Domain'}</p>
-      </div>
-    </div>`;
+const isImg=data.media_type==='image';
+sec.innerHTML=`
+   <div class="apod-hero">
+     <div class="apod-img-wrap">
+       ${isImg
+         ?`<img src="${data.hdurl||data.url}" alt="${data.title||''}" loading="lazy"/>`
+         :`<div style="display:flex;align-items:center;justify-content:center;height:100%;min-height:260px;color:var(--text3);font-size:.9rem">Video — view on NASA</div>`
+       }
+       <div class="apod-date-pill">${formatDate(data.date)}</div>
+     </div>
+     <div class="apod-info">
+       <h1>${data.title||'Untitled'}</h1>
+       <p class="apod-desc">${data.explanation||''}</p>
+       <p class="apod-credit">${data.copyright?'Photo by '+data.copyright.replace(/\n/g,' '):'NASA — Public Domain'}</p>
+     </div>
+   </div>`;
 }
 
 /* ============================================================
-   MOON
-   ============================================================ */
+  MOON
+  ============================================================ */
 const PHASES=[
-  {e:'🌑',n:'New Moon',min:0,max:1.85},
-  {e:'🌒',n:'Waxing Crescent',min:1.85,max:7.38},
-  {e:'🌓',n:'First Quarter',min:7.38,max:11.08},
-  {e:'🌔',n:'Waxing Gibbous',min:11.08,max:14.77},
-  {e:'🌕',n:'Full Moon',min:14.77,max:16.62},
-  {e:'🌖',n:'Waning Gibbous',min:16.62,max:22.15},
-  {e:'🌗',n:'Last Quarter',min:22.15,max:25.85},
-  {e:'🌘',n:'Waning Crescent',min:25.85,max:29.53},
+{e:'🌑',n:'New Moon',min:0,max:1.85},
+{e:'🌒',n:'Waxing Crescent',min:1.85,max:7.38},
+{e:'🌓',n:'First Quarter',min:7.38,max:11.08},
+{e:'🌔',n:'Waxing Gibbous',min:11.08,max:14.77},
+{e:'🌕',n:'Full Moon',min:14.77,max:16.62},
+{e:'🌖',n:'Waning Gibbous',min:16.62,max:22.15},
+{e:'🌗',n:'Last Quarter',min:22.15,max:25.85},
+{e:'🌘',n:'Waning Crescent',min:25.85,max:29.53},
 ];
 function lunarAge(date){
-  const ref=new Date('2000-01-06T18:14:00Z');
-  const c=29.530588;
-  const e=(date-ref)/86400000;
-  return((e%c)+c)%c;
+const ref=new Date('2000-01-06T18:14:00Z');
+const c=29.530588;
+const e=(date-ref)/86400000;
+return((e%c)+c)%c;
 }
 function renderMoon(date,container){
-  const age=lunarAge(date);
-  const pct=(age/29.53)*100;
-  const phase=PHASES.find(p=>age>=p.min&&age<p.max)||PHASES[0];
+const age=lunarAge(date);
+const pct=(age/29.53)*100;
+const phase=PHASES.find(p=>age>=p.min&&age<p.max)||PHASES[0];
+  /* Use a unique suffix per container so IDs never clash between home and moon page */
   const uid=container.id||('moon-'+Date.now());
   const shadowId='moonShadow-'+uid;
   const trackId='moonTrack-'+uid;
-  const chipsHtml=PHASES.map(p=>`
-    <div class="phase-chip${p.n===phase.n?' active':''}">
-      <span class="pe">${p.e}</span>${p.n.split(' ').slice(-1)[0]}
-    </div>`).join('');
-  container.innerHTML=`
-    <div class="moon-wrap">
-      <div class="moon-sphere-col">
-        <div class="moon-sphere" id="${shadowId}"></div>
-        <div class="moon-name">${phase.n}</div>
-        <div class="moon-sub">Day ${age.toFixed(1)} of 29.5</div>
-      </div>
-      <div class="moon-data">
-        <div>
-          <div class="moon-progress-label"><span>Cycle Progress</span><span>${Math.round(pct)}%</span></div>
+const chipsHtml=PHASES.map(p=>`
+   <div class="phase-chip${p.n===phase.n?' active':''}">
+     <span class="pe">${p.e}</span>${p.n.split(' ').slice(-1)[0]}
+   </div>`).join('');
+container.innerHTML=`
+   <div class="moon-wrap">
+     <div class="moon-sphere-col">
+        <div class="moon-sphere" id="moonSphereEl">
+          <div class="moon-shadow-layer" id="moonShadowEl"></div>
+        <div class="moon-sphere">
+          <div class="moon-shadow-layer" id="${shadowId}"></div>
+       </div>
+       <div class="moon-name">${phase.n}</div>
+       <div class="moon-sub">Day ${age.toFixed(1)} of 29.5</div>
+     </div>
+     <div class="moon-data">
+       <div>
+         <div class="moon-progress-label"><span>Cycle Progress</span><span>${Math.round(pct)}%</span></div>
+          <div class="track"><div class="track-fill" id="moonTrack" style="width:0%"></div></div>
           <div class="track"><div class="track-fill" id="${trackId}" style="width:0%"></div></div>
-          <div class="track-ends"><span>New</span><span>Full</span><span>New</span></div>
-        </div>
-        <div class="phases-row">${chipsHtml}</div>
-      </div>
-    </div>`;
+         <div class="track-ends"><span>New</span><span>Full</span><span>New</span></div>
+       </div>
+       <div class="phases-row">${chipsHtml}</div>
+     </div>
+   </div>`;
+  setTimeout(()=>{
+    const tf=document.getElementById('moonTrack');
+  /* Use requestAnimationFrame so the DOM is fully painted before we mutate it */
   requestAnimationFrame(()=>{
     const tf=document.getElementById(trackId);
-    if(tf)tf.style.width=pct+'%';
+if(tf)tf.style.width=pct+'%';
+  },100);
+  applyMoonShadow('moonShadowEl',age);
     applyMoonShadow(shadowId,age);
   });
 }
 function renderMoonFull(date,container){
-  renderMoon(date,container);
+renderMoon(date,container);
 }
 function applyMoonShadow(id,age){
-  /* Find the .moon-sphere parent of the shadow element */
-  const shadow=document.getElementById(id);
-  if(!shadow)return;
-  const sphere=shadow.parentElement;
-  if(!sphere)return;
-
-  const R=65; /* SVG radius */
-  const C=65; /* SVG center */
-  const S=130;/* SVG size */
-  const BG='#121212';
-  const LIT0='#f0f0f0';
-  const LIT1='#c8c8c8';
-  const LIT2='#909090';
-  const LIT3='#585858';
-
-  /* Clamp age */
-  const a=Math.max(0,Math.min(29.53,age));
-
-  /* For the terminator: how far the ellipse centre-x shifts.
-     waxing: light on left, shadow sweeps from right to left
-     waning: light on right, shadow sweeps from left to right      */
-  const waxing = a < 14.77;
-  /* p: 0 at new moon, 1 at full moon (both phases) */
-  const p = waxing ? a/14.77 : (29.53-a)/14.77;
-
-  /* rx = x-radius of the terminator ellipse (0=half-moon, R=new/full) */
-  const rx = R * Math.abs(1 - 2*p);
-  /* which direction does the ellipse bulge? */
-  const bulgeLeft = waxing ? (p < 0.5) : (p > 0.5);
-
-  /* Build the lit-side path:
-     Always a full right or left semicircle, plus a closing ellipse arc */
-  let path = '';
-  if(a <= 1){
-    /* New moon — fully dark, no lit area */
-    sphere.innerHTML=`<svg width="${S}" height="${S}" viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="${C}" cy="${C}" r="${R}" fill="${BG}"/>
-    </svg>`;
-    return;
-  }
-  if(a >= 14.4 && a <= 15.1){
-    /* Full moon */
-    sphere.innerHTML=`<svg width="${S}" height="${S}" viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="mg" cx="38%" cy="36%" r="60%">
-          <stop offset="0%" stop-color="${LIT0}"/>
-          <stop offset="45%" stop-color="${LIT1}"/>
-          <stop offset="78%" stop-color="${LIT2}"/>
-          <stop offset="100%" stop-color="${LIT3}"/>
-        </radialGradient>
-      </defs>
-      <circle cx="${C}" cy="${C}" r="${R}" fill="url(#mg)"/>
-    </svg>`;
-    return;
-  }
-  if(a >= 28.5){
-    /* Near new moon — fully dark */
-    sphere.innerHTML=`<svg width="${S}" height="${S}" viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="${C}" cy="${C}" r="${R}" fill="${BG}"/>
-    </svg>`;
-    return;
-  }
-
-  /* General case: partial moon
-     The lit area is always one semicircle (left for waxing, right for waning)
-     plus an ellipse arc that forms the terminator.
-     We draw the lit region as an SVG path then fill the rest dark.            */
-
-  /* Waxing: lit on LEFT side. Waning: lit on RIGHT side. */
-  const litLeft = waxing;
-
-  /* Terminator ellipse: vertical axis = R, horizontal axis = rx
-     Bulges toward the dark side when crescent, toward lit side when gibbous  */
-  const sweep = litLeft
-    ? (p < 0.5 ? 0 : 1)   /* waxing crescent: ellipse opens right; gibbous: opens left */
-    : (p < 0.5 ? 1 : 0);  /* waning crescent: ellipse opens left; gibbous: opens right */
-
-  /* SVG path for the lit region inside the moon circle */
-  /* Start at top (C, C-R), draw semicircle on lit side, then ellipse back */
-  let litPath;
-  if(litLeft){
-    /* Left semicircle: top → bottom going left */
-    litPath = `M ${C} ${C-R} A ${R} ${R} 0 0 0 ${C} ${C+R} A ${rx} ${R} 0 0 ${sweep} ${C} ${C-R} Z`;
-  } else {
-    /* Right semicircle: top → bottom going right */
-    litPath = `M ${C} ${C-R} A ${R} ${R} 0 0 1 ${C} ${C+R} A ${rx} ${R} 0 0 ${1-sweep} ${C} ${C-R} Z`;
-  }
-
-  sphere.innerHTML=`<svg width="${S}" height="${S}" viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <radialGradient id="mg${id}" cx="38%" cy="36%" r="60%">
-        <stop offset="0%" stop-color="${LIT0}"/>
-        <stop offset="45%" stop-color="${LIT1}"/>
-        <stop offset="78%" stop-color="${LIT2}"/>
-        <stop offset="100%" stop-color="${LIT3}"/>
-      </radialGradient>
-      <clipPath id="mc${id}">
-        <circle cx="${C}" cy="${C}" r="${R}"/>
-      </clipPath>
-    </defs>
-    <!-- dark background (shadow side) -->
-    <circle cx="${C}" cy="${C}" r="${R}" fill="${BG}"/>
-    <!-- lit crescent/gibbous -->
-    <path d="${litPath}" fill="url(#mg${id})" clip-path="url(#mc${id})"/>
-  </svg>`;
+const el=document.getElementById(id);
+if(!el)return;
+if(age<1||age>28.5){
+el.style.cssText='position:absolute;inset:0;border-radius:50%;background:var(--bg)';
+return;
+}
+if(age>14.4&&age<14.9){
+el.style.cssText='position:absolute;inset:0;border-radius:50%;background:transparent';
+return;
+}
+const waxing=age<14.77;
+const pct2=waxing?age/14.77:(age-14.77)/14.77;
+const w=50+pct2*50;
+if(waxing){
+el.style.cssText=`position:absolute;top:0;bottom:0;right:0;width:${w}%;border-radius:${50+pct2*50}% ${50-pct2*50}% ${50-pct2*50}% ${50+pct2*50}%;background:var(--bg)`;
+}else{
+el.style.cssText=`position:absolute;top:0;bottom:0;left:0;width:${w}%;border-radius:${50-pct2*50}% ${50+pct2*50}% ${50+pct2*50}% ${50-pct2*50}%;background:var(--bg)`;
+}
 }
 
 /* ============================================================
-   NEO — ASTEROIDS
-   ============================================================ */
+  NEO — ASTEROIDS
+  ============================================================ */
 async function fetchNEO(){
-  const sec=document.getElementById('neoSection');
-  const t=todayStr();
-  const{ok,data}=await apiFetch(`${NASA}/neo/rest/v1/feed?start_date=${t}&end_date=${t}&api_key=${API_KEY}`);
-  if(!ok){sec.innerHTML=`<div class="err-banner">Couldn't load asteroid data.</div>`;return}
-  const all=Object.values(data.near_earth_objects||{}).flat();
-  const haz=all.filter(n=>n.is_potentially_hazardous_asteroid);
-  const closest=all.length?Math.min(...all.map(n=>parseFloat(n.close_approach_data[0]?.miss_distance?.kilometers||Infinity))):0;
-  sec.innerHTML=`
-    <div class="neo-stats-row">
-      <div class="neo-stat">
-        <span class="neo-stat-val">${all.length}</span>
-        <span class="neo-stat-lbl">Passing Today</span>
-      </div>
-      <div class="neo-stat">
-        <span class="neo-stat-val${haz.length?' danger':''}">${haz.length}</span>
-        <span class="neo-stat-lbl">Flagged Watch</span>
-      </div>
-      <div class="neo-stat">
-        <span class="neo-stat-val" style="font-size:1.7rem">${closest?closest.toLocaleString(undefined,{maximumFractionDigits:0}):'—'} <small style="font-size:.9rem;color:var(--text3)">km</small></span>
-        <span class="neo-stat-lbl">Closest Pass</span>
-      </div>
-    </div>
-    <div class="neo-grid">
-      ${all.slice(0,9).map((n,i)=>{
-        const ca=n.close_approach_data[0]||{};
-        const dMin=n.estimated_diameter?.kilometers?.estimated_diameter_min?.toFixed(3)||'?';
-        const dMax=n.estimated_diameter?.kilometers?.estimated_diameter_max?.toFixed(3)||'?';
-        const miss=parseFloat(ca.miss_distance?.kilometers||0).toLocaleString(undefined,{maximumFractionDigits:0});
-        const vel=parseFloat(ca.relative_velocity?.kilometers_per_hour||0).toLocaleString(undefined,{maximumFractionDigits:0});
-        return`
-        <div class="neo-card${n.is_potentially_hazardous_asteroid?' haz':''}">
-          <div class="neo-thumb">
-            <img src="${ASTEROID_BG[i%ASTEROID_BG.length]}" alt="Asteroid" loading="lazy"/>
-            ${n.is_potentially_hazardous_asteroid?'<span class="haz-pill">Watch</span>':''}
-          </div>
-          <div class="neo-body">
-            <div class="neo-name">${n.name.replace(/[()]/g,'')}</div>
-            <div class="neo-row"><span>Estimated size</span><strong>${dMin}–${dMax} km</strong></div>
-            <div class="neo-row"><span>Miss distance</span><strong>${miss} km</strong></div>
-            <div class="neo-row"><span>Speed</span><strong>${vel} km/h</strong></div>
-          </div>
-        </div>`;
-      }).join('')}
-    </div>`;
+const sec=document.getElementById('neoSection');
+const t=todayStr();
+const{ok,data}=await apiFetch(`${NASA}/neo/rest/v1/feed?start_date=${t}&end_date=${t}&api_key=${API_KEY}`);
+if(!ok){sec.innerHTML=`<div class="err-banner">Couldn't load asteroid data.</div>`;return}
+const all=Object.values(data.near_earth_objects||{}).flat();
+const haz=all.filter(n=>n.is_potentially_hazardous_asteroid);
+const closest=all.length?Math.min(...all.map(n=>parseFloat(n.close_approach_data[0]?.miss_distance?.kilometers||Infinity))):0;
+sec.innerHTML=`
+   <div class="neo-stats-row">
+     <div class="neo-stat">
+       <span class="neo-stat-val">${all.length}</span>
+       <span class="neo-stat-lbl">Passing Today</span>
+     </div>
+     <div class="neo-stat">
+       <span class="neo-stat-val${haz.length?' danger':''}">${haz.length}</span>
+       <span class="neo-stat-lbl">Flagged Watch</span>
+     </div>
+     <div class="neo-stat">
+       <span class="neo-stat-val" style="font-size:1.7rem">${closest?closest.toLocaleString(undefined,{maximumFractionDigits:0}):'—'} <small style="font-size:.9rem;color:var(--text3)">km</small></span>
+       <span class="neo-stat-lbl">Closest Pass</span>
+     </div>
+   </div>
+   <div class="neo-grid">
+     ${all.slice(0,9).map((n,i)=>{
+       const ca=n.close_approach_data[0]||{};
+       const dMin=n.estimated_diameter?.kilometers?.estimated_diameter_min?.toFixed(3)||'?';
+       const dMax=n.estimated_diameter?.kilometers?.estimated_diameter_max?.toFixed(3)||'?';
+       const miss=parseFloat(ca.miss_distance?.kilometers||0).toLocaleString(undefined,{maximumFractionDigits:0});
+       const vel=parseFloat(ca.relative_velocity?.kilometers_per_hour||0).toLocaleString(undefined,{maximumFractionDigits:0});
+       return`
+       <div class="neo-card${n.is_potentially_hazardous_asteroid?' haz':''}">
+         <div class="neo-thumb">
+           <img src="${ASTEROID_BG[i%ASTEROID_BG.length]}" alt="Asteroid" loading="lazy"/>
+           ${n.is_potentially_hazardous_asteroid?'<span class="haz-pill">Watch</span>':''}
+         </div>
+         <div class="neo-body">
+           <div class="neo-name">${n.name.replace(/[()]/g,'')}</div>
+           <div class="neo-row"><span>Estimated size</span><strong>${dMin}–${dMax} km</strong></div>
+           <div class="neo-row"><span>Miss distance</span><strong>${miss} km</strong></div>
+           <div class="neo-row"><span>Speed</span><strong>${vel} km/h</strong></div>
+         </div>
+       </div>`;
+     }).join('')}
+   </div>`;
 }
 
 /* ============================================================
-   MARS ROVER
-   ============================================================ */
+  MARS ROVER
+  ============================================================ */
 /* NASA Mars API returns http:// URLs — force https:// to avoid mixed-content blocks */
 function marsHttps(url){
-  if(!url)return url;
-  return url.replace(/^http:\/\//i,'https://');
+if(!url)return url;
+return url.replace(/^http:\/\//i,'https://');
 }
 
 async function fetchMarsWithFallback(sol){
-  const sec=document.getElementById('marsSection');
-  sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Receiving signals from Mars…</span></div>`;
-  let photos=[];
-  let usedSol=sol;
+const sec=document.getElementById('marsSection');
+sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Receiving signals from Mars…</span></div>`;
+let photos=[];
+let usedSol=sol;
 
-  /* Try the requested sol, then walk back in steps of 50 up to 20 attempts */
-  for(let attempt=0;attempt<20;attempt++){
-    const trySol=sol-attempt*50;
-    if(trySol<1)break;
-    const{ok,data}=await apiFetch(
-      `${NASA}/mars-photos/api/v1/rovers/curiosity/photos?sol=${trySol}&api_key=${API_KEY}`
-    );
-    if(ok&&data.photos&&data.photos.length>0){
-      photos=data.photos;usedSol=trySol;break;
-    }
-  }
+/* Try the requested sol, then walk back in steps of 50 up to 20 attempts */
+for(let attempt=0;attempt<20;attempt++){
+const trySol=sol-attempt*50;
+if(trySol<1)break;
+const{ok,data}=await apiFetch(
+`${NASA}/mars-photos/api/v1/rovers/curiosity/photos?sol=${trySol}&api_key=${API_KEY}`
+);
+if(ok&&data.photos&&data.photos.length>0){
+photos=data.photos;usedSol=trySol;break;
+}
+}
 
-  /* Final fallback: use the /latest_photos endpoint */
-  if(!photos.length){
-    const{ok,data}=await apiFetch(
-      `${NASA}/mars-photos/api/v1/rovers/curiosity/latest_photos?api_key=${API_KEY}`
-    );
-    if(ok&&data.latest_photos&&data.latest_photos.length>0){
-      photos=data.latest_photos;
-      usedSol=photos[0]?.sol||'latest';
-    }
-  }
+/* Final fallback: use the /latest_photos endpoint */
+if(!photos.length){
+const{ok,data}=await apiFetch(
+`${NASA}/mars-photos/api/v1/rovers/curiosity/latest_photos?api_key=${API_KEY}`
+);
+if(ok&&data.latest_photos&&data.latest_photos.length>0){
+photos=data.latest_photos;
+usedSol=photos[0]?.sol||'latest';
+}
+}
 
-  if(!photos.length){
-    sec.innerHTML=`<div class="empty-msg">No Mars photos found right now.<br>Try a different Sol number.</div>`;
-    return;
-  }
+if(!photos.length){
+sec.innerHTML=`<div class="empty-msg">No Mars photos found right now.<br>Try a different Sol number.</div>`;
+return;
+}
 
-  sec.innerHTML=`
-    <p style="font-size:.78rem;color:var(--text3);margin-bottom:1rem">
-      Showing ${Math.min(photos.length,24)} photos from Sol ${usedSol}
-    </p>
-    <div class="mars-gallery">
-      ${photos.slice(0,24).map(p=>{
-        /* Force https so browsers don't block mixed-content images */
-        const src=marsHttps(p.img_src);
-        const safeCaption = (`${p.camera.full_name} · Sol ${p.sol} · ${p.earth_date}`).replace(/\\/g,"\\\\").replace(/'/g,"\\'");
-        return `
-        <div class="mars-photo" onclick="openLB('${src}','${safeCaption}')">
-          <img src="${src}" alt="${p.camera.name}" loading="lazy"
-               onerror="this.closest('.mars-photo').style.display='none'"/>
-          <div class="mars-label">${p.camera.name}</div>
-        </div>`;
-      }).join('')}
-    </div>`;
+sec.innerHTML=`
+   <p style="font-size:.78rem;color:var(--text3);margin-bottom:1rem">
+     Showing ${Math.min(photos.length,24)} photos from Sol ${usedSol}
+   </p>
+   <div class="mars-gallery">
+     ${photos.slice(0,24).map(p=>{
+       /* Force https so browsers don't block mixed-content images */
+       const src=marsHttps(p.img_src);
+       const safeCaption = (`${p.camera.full_name} · Sol ${p.sol} · ${p.earth_date}`).replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+       return `
+       <div class="mars-photo" onclick="openLB('${src}','${safeCaption}')">
+         <img src="${src}" alt="${p.camera.name}" loading="lazy"
+              onerror="this.closest('.mars-photo').style.display='none'"/>
+         <div class="mars-label">${p.camera.name}</div>
+       </div>`;
+     }).join('')}
+   </div>`;
 }
 
 document.getElementById('solBtn').addEventListener('click',()=>{
-  const s=parseInt(document.getElementById('solInput').value)||3500;
-  fetchMarsWithFallback(s);
+const s=parseInt(document.getElementById('solInput').value)||3500;
+fetchMarsWithFallback(s);
 });
 
 /* ============================================================
-   PLAYLISTS
-   ============================================================ */
+  PLAYLISTS
+  ============================================================ */
 function loadPlaylists(){
-  try{
-    const stored=localStorage.getItem('cosmos_playlists');
-    playlists=stored?JSON.parse(stored):[...DEFAULT_PLAYLISTS];
-  }catch{playlists=[...DEFAULT_PLAYLISTS]}
-  DEFAULT_PLAYLISTS.forEach(def=>{
-    if(!playlists.find(p=>p.id===def.id))playlists.unshift(def);
-  });
+try{
+const stored=localStorage.getItem('cosmos_playlists');
+playlists=stored?JSON.parse(stored):[...DEFAULT_PLAYLISTS];
+}catch{playlists=[...DEFAULT_PLAYLISTS]}
+DEFAULT_PLAYLISTS.forEach(def=>{
+if(!playlists.find(p=>p.id===def.id))playlists.unshift(def);
+});
 }
 function savePlaylists(){
-  try { localStorage.setItem('cosmos_playlists',JSON.stringify(playlists)); } catch(e) {}
+try { localStorage.setItem('cosmos_playlists',JSON.stringify(playlists)); } catch(e) {}
 }
 
 function renderPlaylists(){
-  const scroll=document.getElementById('playlistScroll');
-  const sidebar=document.getElementById('sidebarPlaylists');
-  scroll.innerHTML=playlists.map(pl=>plCard(pl)).join('');
-  sidebar.innerHTML=playlists.map(pl=>`
-    <div class="sidebar-pl-item" onclick="openPlaylistDetail('${pl.id}')">${pl.title}</div>`).join('');
+const scroll=document.getElementById('playlistScroll');
+const sidebar=document.getElementById('sidebarPlaylists');
+scroll.innerHTML=playlists.map(pl=>plCard(pl)).join('');
+sidebar.innerHTML=playlists.map(pl=>`
+   <div class="sidebar-pl-item" onclick="openPlaylistDetail('${pl.id}')">${pl.title}</div>`).join('');
 }
 function plCard(pl){
-  const delBtn = pl.isDefault ? '' : `<button class="pl-delete" onclick="deletePlaylist(event,'${pl.id}')">&#x2715;</button>`;
-  return`
-  <div class="pl-card" data-id="${pl.id}">
-    <div class="pl-cover">
-      <img src="${pl.cover||''}" alt="${pl.title}"
-        onerror="this.src='https://images-assets.nasa.gov/image/PIA20180/PIA20180~thumb.jpg'"
-        loading="lazy"/>
-      <div class="pl-play-btn">
-        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-      </div>
-    </div>
-    <div class="pl-title">${pl.title}</div>
-    <div class="pl-desc">${pl.desc||''}</div>
-    ${delBtn}
-  </div>`;
+const delBtn = pl.isDefault ? '' : `<button class="pl-delete" onclick="deletePlaylist(event,'${pl.id}')">&#x2715;</button>`;
+return`
+ <div class="pl-card" data-id="${pl.id}">
+   <div class="pl-cover">
+     <img src="${pl.cover||''}" alt="${pl.title}"
+       onerror="this.src='https://images-assets.nasa.gov/image/PIA20180/PIA20180~thumb.jpg'"
+       loading="lazy"/>
+     <div class="pl-play-btn">
+       <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+     </div>
+   </div>
+   <div class="pl-title">${pl.title}</div>
+   <div class="pl-desc">${pl.desc||''}</div>
+   ${delBtn}
+ </div>`;
 }
 document.getElementById('playlistScroll').addEventListener('click',e=>{
-  const card=e.target.closest('.pl-card');
-  if(!card||e.target.classList.contains('pl-delete'))return;
-  openPlaylistDetail(card.dataset.id);
+const card=e.target.closest('.pl-card');
+if(!card||e.target.classList.contains('pl-delete'))return;
+openPlaylistDetail(card.dataset.id);
 });
 
 /* PLAYLIST DETAIL */
 async function openPlaylistDetail(id){
-  const pl=playlists.find(p=>p.id===id);
-  if(!pl)return;
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('playlistDetailPage').style.display='block';
-  document.getElementById('topbarTitle').textContent=pl.title;
-  document.getElementById('detailCoverImg').src=pl.cover||'';
-  document.getElementById('detailTitle').textContent=pl.title;
-  document.getElementById('detailDesc').textContent=pl.desc||'';
-  document.getElementById('detailMeta').textContent=`Created ${new Date(pl.created).toLocaleDateString()}`;
-  document.querySelectorAll('.sidebar-pl-item').forEach(el=>el.classList.remove('active'));
-  const items=document.querySelectorAll('.sidebar-pl-item');
-  items.forEach(el=>{if(el.textContent===pl.title)el.classList.add('active')});
-  const dc=document.getElementById('detailContent');
-  dc.innerHTML=`<div class="loader"><div class="spin"></div><span>Loading photos…</span></div>`;
-  const query=pl.query||pl.title;
-  const{ok,data}=await apiFetch(
-    `https://images-api.nasa.gov/search?q=${encodeURIComponent(query)}&media_type=image&page_size=24`
-  );
-  if(!ok||!data.collection?.items?.length){
-    dc.innerHTML=`<div class="empty-msg">No photos found for this playlist.<br>Try searching with a different title.</div>`;
-    return;
-  }
-  const items2=data.collection.items.slice(0,24);
-  dc.innerHTML=items2.map(item=>{
-    const img=item.links?.[0]?.href||'';
-    const rawTitle=item.data?.[0]?.title||'';
-    // EXACT FIX: Properly escape backslashes, single quotes, and double quotes for the inline onclick handler
-    const safeTitle = rawTitle.replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, "&quot;");
-    
-    return`
-      <div class="mars-photo" onclick="openLB('${img}','${safeTitle}')">
-        <img src="${img}" alt="${safeTitle}" loading="lazy"/>
-        <div class="mars-label">${rawTitle.slice(0,40)}</div>
-      </div>`;
-  }).join('');
+const pl=playlists.find(p=>p.id===id);
+if(!pl)return;
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById('playlistDetailPage').style.display='block';
+document.getElementById('topbarTitle').textContent=pl.title;
+document.getElementById('detailCoverImg').src=pl.cover||'';
+document.getElementById('detailTitle').textContent=pl.title;
+document.getElementById('detailDesc').textContent=pl.desc||'';
+document.getElementById('detailMeta').textContent=`Created ${new Date(pl.created).toLocaleDateString()}`;
+document.querySelectorAll('.sidebar-pl-item').forEach(el=>el.classList.remove('active'));
+const items=document.querySelectorAll('.sidebar-pl-item');
+items.forEach(el=>{if(el.textContent===pl.title)el.classList.add('active')});
+const dc=document.getElementById('detailContent');
+dc.innerHTML=`<div class="loader"><div class="spin"></div><span>Loading photos…</span></div>`;
+const query=pl.query||pl.title;
+const{ok,data}=await apiFetch(
+`https://images-api.nasa.gov/search?q=${encodeURIComponent(query)}&media_type=image&page_size=24`
+);
+if(!ok||!data.collection?.items?.length){
+dc.innerHTML=`<div class="empty-msg">No photos found for this playlist.<br>Try searching with a different title.</div>`;
+return;
+}
+const items2=data.collection.items.slice(0,24);
+dc.innerHTML=items2.map(item=>{
+const img=item.links?.[0]?.href||'';
+const rawTitle=item.data?.[0]?.title||'';
+// EXACT FIX: Properly escape backslashes, single quotes, and double quotes for the inline onclick handler
+const safeTitle = rawTitle.replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, "&quot;");
+
+return`
+     <div class="mars-photo" onclick="openLB('${img}','${safeTitle}')">
+       <img src="${img}" alt="${safeTitle}" loading="lazy"/>
+       <div class="mars-label">${rawTitle.slice(0,40)}</div>
+     </div>`;
+}).join('');
 }
 
 document.getElementById('backToPlaylists').addEventListener('click',()=>{
-  document.getElementById('playlistDetailPage').style.display='none';
-  showPage('playlists');
+document.getElementById('playlistDetailPage').style.display='none';
+showPage('playlists');
 });
 
 /* DELETE */
 function deletePlaylist(e,id){
-  e.stopPropagation();
-  playlists=playlists.filter(p=>p.id!==id);
-  savePlaylists();
-  renderPlaylists();
+e.stopPropagation();
+playlists=playlists.filter(p=>p.id!==id);
+savePlaylists();
+renderPlaylists();
 }
 
 /* CREATE MODAL */
 let coverDataUrl='';
 document.getElementById('openCreateModal').addEventListener('click',()=>{
-  document.getElementById('createModal').style.display='flex';
-  document.getElementById('plTitle').value='';
-  document.getElementById('plDesc').value='';
-  document.getElementById('coverPreview').style.display='none';
-  document.getElementById('coverUploadLabel').style.display='block';
-  coverDataUrl='';
+document.getElementById('createModal').style.display='flex';
+document.getElementById('plTitle').value='';
+document.getElementById('plDesc').value='';
+document.getElementById('coverPreview').style.display='none';
+document.getElementById('coverUploadLabel').style.display='block';
+coverDataUrl='';
 });
 document.getElementById('cancelModal').addEventListener('click',()=>{
-  document.getElementById('createModal').style.display='none';
+document.getElementById('createModal').style.display='none';
 });
 document.getElementById('createModal').addEventListener('click',e=>{
-  if(e.target===document.getElementById('createModal'))
-    document.getElementById('createModal').style.display='none';
+if(e.target===document.getElementById('createModal'))
+document.getElementById('createModal').style.display='none';
 });
 document.getElementById('coverFileInput').addEventListener('change',e=>{
-  const file=e.target.files[0];
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    coverDataUrl=ev.target.result;
-    const prev=document.getElementById('coverPreview');
-    prev.src=coverDataUrl;prev.style.display='block';
-    document.getElementById('coverUploadLabel').style.display='none';
-  };
-  reader.readAsDataURL(file);
+const file=e.target.files[0];
+if(!file)return;
+const reader=new FileReader();
+reader.onload=ev=>{
+coverDataUrl=ev.target.result;
+const prev=document.getElementById('coverPreview');
+prev.src=coverDataUrl;prev.style.display='block';
+document.getElementById('coverUploadLabel').style.display='none';
+};
+reader.readAsDataURL(file);
 });
 document.getElementById('savePlaylist').addEventListener('click',()=>{
-  const title=document.getElementById('plTitle').value.trim();
-  const desc=document.getElementById('plDesc').value.trim();
-  if(!title){document.getElementById('plTitle').style.borderColor='#e53935';return}
-  const pl={
-    id:'pl-'+Date.now(),
-    title,desc,
-    cover:coverDataUrl||ASTEROID_BG[Math.floor(Math.random()*ASTEROID_BG.length)],
-    created:Date.now(),
-    isDefault:false,
-    query:title
-  };
-  playlists.push(pl);
-  savePlaylists();
-  renderPlaylists();
-  document.getElementById('createModal').style.display='none';
+const title=document.getElementById('plTitle').value.trim();
+const desc=document.getElementById('plDesc').value.trim();
+if(!title){document.getElementById('plTitle').style.borderColor='#e53935';return}
+const pl={
+id:'pl-'+Date.now(),
+title,desc,
+cover:coverDataUrl||ASTEROID_BG[Math.floor(Math.random()*ASTEROID_BG.length)],
+created:Date.now(),
+isDefault:false,
+query:title
+};
+playlists.push(pl);
+savePlaylists();
+renderPlaylists();
+document.getElementById('createModal').style.display='none';
 });
 
 /* ============================================================
-   LIGHTBOX
-   ============================================================ */
+  LIGHTBOX
+  ============================================================ */
 function openLB(src,caption){
-  document.getElementById('lbImg').src=src;
-  document.getElementById('lbCaption').innerHTML=caption;
-  document.getElementById('lightbox').classList.add('open');
+document.getElementById('lbImg').src=src;
+document.getElementById('lbCaption').innerHTML=caption;
+document.getElementById('lightbox').classList.add('open');
 }
 document.getElementById('lbClose').addEventListener('click',()=>{
-  document.getElementById('lightbox').classList.remove('open');
+document.getElementById('lightbox').classList.remove('open');
 });
 document.getElementById('lightbox').addEventListener('click',e=>{
-  if(e.target===document.getElementById('lightbox'))
-    document.getElementById('lightbox').classList.remove('open');
+if(e.target===document.getElementById('lightbox'))
+document.getElementById('lightbox').classList.remove('open');
 });
 </script>
 </body>
