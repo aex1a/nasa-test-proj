@@ -270,9 +270,15 @@ input,textarea{font-family:var(--sans)}
     <div class="page" id="page-mars">
       <div class="sec-head"><h2>Mars Rover Gallery</h2></div>
       <div class="mars-controls">
-        <label for="solInput">Martian Day (Sol)</label>
-        <input type="number" id="solInput" value="3500" min="1" max="5000"/>
-        <button class="btn btn-sm" id="solBtn">Browse Photos</button>
+        <select id="roverSelect" style="background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);color:var(--text);padding:.55rem .9rem;font-size:.88rem;outline:none;cursor:pointer;">
+          <option value="curiosity">Curiosity</option>
+          <option value="perseverance">Perseverance</option>
+          <option value="opportunity">Opportunity</option>
+        </select>
+        <label for="solInput">Sol</label>
+        <input type="number" id="solInput" value="" placeholder="leave blank = latest" min="1" max="5000" style="width:160px"/>
+        <button class="btn btn-sm" id="solBtn">Load Photos</button>
+        <button class="btn-ghost btn-sm" id="latestBtn">Latest</button>
       </div>
       <div id="marsSection"><div class="loader"><div class="spin"></div><span>Receiving signals from Mars…</span></div></div>
     </div>
@@ -379,7 +385,7 @@ document.getElementById('keyInput').addEventListener('keydown',e=>{if(e.key==='E
 function bootApp(){
   document.getElementById('keyScreen').style.display='none';
   document.getElementById('app').style.display='block';
-  loadPlaylists();fetchAPOD();fetchNEO();fetchMarsWithFallback(3500);renderPlaylists();initNav();
+  loadPlaylists();fetchAPOD();fetchNEO();fetchMarsLatest('curiosity');renderPlaylists();initNav();
 }
 
 let currentPage='home';
@@ -521,23 +527,73 @@ async function fetchNEO(){
 }
 
 function marsHttps(url){if(!url)return url;return url.replace(/^http:\/\//i,'https://');}
-async function fetchMarsWithFallback(sol){
+
+async function fetchMarsLatest(rover){
+  // Always-works path: just get the latest photos for this rover
   const sec=document.getElementById('marsSection');
-  sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Receiving signals from Mars…</span></div>`;
-  let photos=[];let usedSol=sol;
-  for(let attempt=0;attempt<20;attempt++){
-    const trySol=sol-attempt*50;if(trySol<1)break;
-    const{ok,data}=await apiFetch(`${NASA}/mars-photos/api/v1/rovers/curiosity/photos?sol=${trySol}&api_key=${API_KEY}`);
-    if(ok&&data.photos&&data.photos.length>0){photos=data.photos;usedSol=trySol;break;}
+  sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Fetching latest photos from ${rover}…</span></div>`;
+  const{ok,status,data}=await apiFetch(`${NASA}/mars-photos/api/v1/rovers/${rover}/latest_photos?api_key=${API_KEY}`);
+  if(!ok){
+    const msg=status===429||status===403
+      ?`Rate limit reached. <a href="https://api.nasa.gov" target="_blank" style="color:var(--accent)">Get a free API key</a> for more requests.`
+      :`API error (${status||'network'}). Check your key or try again.`;
+    sec.innerHTML=`<div class="err-banner">${msg}</div>`;return;
   }
-  if(!photos.length){
-    const{ok,data}=await apiFetch(`${NASA}/mars-photos/api/v1/rovers/curiosity/latest_photos?api_key=${API_KEY}`);
-    if(ok&&data.latest_photos&&data.latest_photos.length>0){photos=data.latest_photos;usedSol=photos[0]?.sol||'latest';}
-  }
-  if(!photos.length){sec.innerHTML=`<div class="empty-msg">No Mars photos found right now.<br>Try a different Sol number.</div>`;return;}
-  sec.innerHTML=`<p style="font-size:.78rem;color:var(--text3);margin-bottom:1rem">Showing ${Math.min(photos.length,24)} photos from Sol ${usedSol}</p><div class="mars-gallery">${photos.slice(0,24).map(p=>{const src=marsHttps(p.img_src);const safeCaption=(`${p.camera.full_name} · Sol ${p.sol} · ${p.earth_date}`).replace(/\\/g,'\\\\').replace(/'/g,"\\'");return`<div class="mars-photo" onclick="openLB('${src}','${safeCaption}')"><img src="${src}" alt="${p.camera.name}" loading="lazy" onerror="this.closest('.mars-photo').style.display='none'"/><div class="mars-label">${p.camera.name}</div></div>`;}).join('')}</div>`;
+  const photos=(data.latest_photos||[]);
+  if(!photos.length){sec.innerHTML=`<div class="empty-msg">No recent photos for ${rover}.<br>Try a different rover.</div>`;return;}
+  const usedSol=photos[0]?.sol||'?';
+  document.getElementById('solInput').value=usedSol;
+  renderMarsPhotos(photos,rover,usedSol,sec);
 }
-document.getElementById('solBtn').addEventListener('click',()=>{const s=parseInt(document.getElementById('solInput').value)||3500;fetchMarsWithFallback(s);});
+
+async function fetchMarsBySol(rover,sol){
+  const sec=document.getElementById('marsSection');
+  sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Fetching Sol ${sol} from ${rover}…</span></div>`;
+  const{ok,status,data}=await apiFetch(`${NASA}/mars-photos/api/v1/rovers/${rover}/photos?sol=${sol}&api_key=${API_KEY}`);
+  if(!ok){
+    const msg=status===429||status===403
+      ?`Rate limit reached. <a href="https://api.nasa.gov" target="_blank" style="color:var(--accent)">Get a free API key</a> for more requests.`
+      :`API error (${status||'network'}). Check your key or try again.`;
+    sec.innerHTML=`<div class="err-banner">${msg}</div>`;return;
+  }
+  const photos=(data.photos||[]);
+  if(!photos.length){
+    sec.innerHTML=`<div class="empty-msg">No photos on Sol ${sol} for ${rover}.<br>Try a nearby sol — not every sol has photos.<br><button class="btn btn-sm" style="margin-top:1rem" onclick="fetchMarsLatest('${rover}')">Load Latest Instead</button></div>`;
+    return;
+  }
+  renderMarsPhotos(photos,rover,sol,sec);
+}
+
+function renderMarsPhotos(photos,rover,sol,sec){
+  const roverLabel=rover.charAt(0).toUpperCase()+rover.slice(1);
+  sec.innerHTML=`
+    <p style="font-size:.78rem;color:var(--text3);margin-bottom:1rem">
+      ${roverLabel} · Sol ${sol} · ${Math.min(photos.length,25)} photos
+    </p>
+    <div class="mars-gallery">
+      ${photos.slice(0,25).map(p=>{
+        const src=marsHttps(p.img_src);
+        const safeCaption=(`${p.camera.full_name} · Sol ${p.sol} · ${p.earth_date}`).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+        return`<div class="mars-photo" onclick="openLB('${src}','${safeCaption}')">
+          <img src="${src}" alt="${p.camera.name}" loading="lazy" onerror="this.closest('.mars-photo').style.display='none'"/>
+          <div class="mars-label">${p.camera.name}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+document.getElementById('solBtn').addEventListener('click',()=>{
+  const rover=document.getElementById('roverSelect').value;
+  const solVal=document.getElementById('solInput').value.trim();
+  if(!solVal){fetchMarsLatest(rover);return;}
+  const sol=parseInt(solVal);
+  if(isNaN(sol)||sol<1){fetchMarsLatest(rover);return;}
+  fetchMarsBySol(rover,sol);
+});
+document.getElementById('latestBtn').addEventListener('click',()=>{
+  const rover=document.getElementById('roverSelect').value;
+  fetchMarsLatest(rover);
+});
 
 function loadPlaylists(){
   try{const stored=localStorage.getItem('cosmos_playlists');playlists=stored?JSON.parse(stored):[...DEFAULT_PLAYLISTS];}
