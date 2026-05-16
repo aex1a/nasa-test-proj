@@ -271,9 +271,10 @@ input,textarea{font-family:var(--sans)}
       <div class="sec-head"><h2>Mars Rover Gallery</h2></div>
       <div class="mars-controls">
         <select id="roverSelect" style="background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);color:var(--text);padding:.55rem .9rem;font-size:.88rem;outline:none;cursor:pointer;">
-          <option value="curiosity">Curiosity</option>
-          <option value="perseverance">Perseverance</option>
-          <option value="opportunity">Opportunity</option>
+          <option value="curiosity">Curiosity (active)</option>
+          <option value="perseverance">Perseverance (active)</option>
+          <option value="opportunity">Opportunity (retired)</option>
+          <option value="spirit">Spirit (retired)</option>
         </select>
         <label for="solInput">Sol</label>
         <input type="number" id="solInput" value="" placeholder="leave blank = latest" min="1" max="5000" style="width:160px"/>
@@ -528,15 +529,30 @@ async function fetchNEO(){
 
 function marsHttps(url){if(!url)return url;return url.replace(/^http:\/\//i,'https://');}
 
+// Rovers that are no longer active — NASA's /latest_photos endpoint 404s for these.
+// We must query by a known final sol instead.
+const RETIRED_ROVERS = {
+  opportunity: { finalSol: 5111 }, // last active sol before signal loss Feb 2019
+  spirit:      { finalSol: 2208 }, // last active sol before signal loss Mar 2010
+};
+
 async function fetchMarsLatest(rover){
-  // Always-works path: just get the latest photos for this rover
   const sec=document.getElementById('marsSection');
-  sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Fetching latest photos from ${rover}…</span></div>`;
+  sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Fetching photos from ${rover}…</span></div>`;
+
+  // Retired rovers don't have a /latest_photos endpoint — use their final sol
+  if(RETIRED_ROVERS[rover]){
+    const finalSol=RETIRED_ROVERS[rover].finalSol;
+    document.getElementById('solInput').value=finalSol;
+    return fetchMarsBySol(rover, finalSol);
+  }
+
+  // Active rovers: use /latest_photos
   const{ok,status,data}=await apiFetch(`${NASA}/mars-photos/api/v1/rovers/${rover}/latest_photos?api_key=${API_KEY}`);
   if(!ok){
     const msg=status===429||status===403
       ?`Rate limit reached. <a href="https://api.nasa.gov" target="_blank" style="color:var(--accent)">Get a free API key</a> for more requests.`
-      :`API error (${status||'network'}). Check your key or try again.`;
+      :`API error (${status||'network'}). Check your API key or try again.`;
     sec.innerHTML=`<div class="err-banner">${msg}</div>`;return;
   }
   const photos=(data.latest_photos||[]);
@@ -551,14 +567,19 @@ async function fetchMarsBySol(rover,sol){
   sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Fetching Sol ${sol} from ${rover}…</span></div>`;
   const{ok,status,data}=await apiFetch(`${NASA}/mars-photos/api/v1/rovers/${rover}/photos?sol=${sol}&api_key=${API_KEY}`);
   if(!ok){
-    const msg=status===429||status===403
-      ?`Rate limit reached. <a href="https://api.nasa.gov" target="_blank" style="color:var(--accent)">Get a free API key</a> for more requests.`
-      :`API error (${status||'network'}). Check your key or try again.`;
+    let msg;
+    if(status===429||status===403){
+      msg=`Rate limit reached with DEMO_KEY (30 req/hr). <a href="https://api.nasa.gov" target="_blank" style="color:var(--accent)">Get a free personal API key</a> — takes 30 seconds.`;
+    } else if(status===404){
+      msg=`Sol ${sol} not found for ${rover}. Try a different sol number, or click <strong>Latest</strong> to load confirmed photos.`;
+    } else {
+      msg=`API error (${status||'network error'}). Check your API key or internet connection.`;
+    }
     sec.innerHTML=`<div class="err-banner">${msg}</div>`;return;
   }
   const photos=(data.photos||[]);
   if(!photos.length){
-    sec.innerHTML=`<div class="empty-msg">No photos on Sol ${sol} for ${rover}.<br>Try a nearby sol — not every sol has photos.<br><button class="btn btn-sm" style="margin-top:1rem" onclick="fetchMarsLatest('${rover}')">Load Latest Instead</button></div>`;
+    sec.innerHTML=`<div class="empty-msg">No photos on Sol ${sol} for ${rover}.<br>Not every sol has photos — try an adjacent number.<br><button class="btn btn-sm" style="margin-top:1rem" onclick="fetchMarsLatest('${rover}')">Load Latest Instead</button></div>`;
     return;
   }
   renderMarsPhotos(photos,rover,sol,sec);
