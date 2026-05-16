@@ -248,7 +248,14 @@ input,textarea{font-family:var(--sans)}
   <div class="content">
     <div class="page active" id="page-home">
       <div class="section-gap">
-        <div class="sec-head"><h2>Today's Sky</h2></div>
+        <div class="sec-head">
+          <h2>Today's Sky</h2>
+          <div style="display:flex;align-items:center;gap:.5rem">
+            <input type="date" id="apodDatePicker" style="background:var(--surface2);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);color:var(--text);padding:.4rem .7rem;font-size:.78rem;outline:none;cursor:pointer;" title="Browse a specific date"/>
+            <button class="btn-ghost btn-sm" id="apodDateBtn">Go</button>
+            <button class="btn-ghost btn-sm" id="apodTodayBtn">Today</button>
+          </div>
+        </div>
         <div id="apodSection"><div class="loader"><div class="spin"></div><span>Loading today's image…</span></div></div>
       </div>
       <div class="section-gap">
@@ -437,14 +444,30 @@ function utcDateOffset(offsetDays) {
 function formatDate(str){if(!str)return'';const d=new Date(str+'T12:00:00Z');return d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});}
 // ────────────────────────────────────────────────────────────────────────────
 
-async function fetchAPOD(){
+async function fetchAPOD(dateStr){
   const sec=document.getElementById('apodSection');
   const moonContainer=document.getElementById('moonSection');
-  let apodData=null;
-  // Try today first, then fall back up to 5 days ago if NASA hasn't published yet
-  for(let offset=0;offset<=5;offset++){
-    const dateStr = utcDateOffset(-offset);
+  sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Loading image…</span></div>`;
+
+  // If a specific date was requested, just try that one
+  if(dateStr){
     const res=await apiFetch(NASA+'/planetary/apod?api_key='+API_KEY+'&date='+dateStr);
+    if(res.ok&&res.data.title){
+      renderAPOD(res.data,sec);
+      const d=new Date(res.data.date+'T12:00:00Z');
+      moonData=d;renderMoon(d,moonContainer);
+      if(currentPage==='moon')renderMoonFull(d,document.getElementById('moonPageSection'));
+      return;
+    }
+    sec.innerHTML=`<div class="err-banner">No image available for ${formatDate(dateStr)}. APOD started June 16, 1995 — try another date.</div>`;
+    return;
+  }
+
+  // Default: try today, fall back up to 5 days if NASA hasn't published yet
+  let apodData=null;
+  for(let offset=0;offset<=5;offset++){
+    const d=utcDateOffset(-offset);
+    const res=await apiFetch(NASA+'/planetary/apod?api_key='+API_KEY+'&date='+d);
     if(res.ok&&res.data.title){apodData=res.data;break;}
   }
   if(!apodData){
@@ -455,6 +478,9 @@ async function fetchAPOD(){
   const d=apodData.date?new Date(apodData.date+'T12:00:00Z'):new Date();
   moonData=d;renderMoon(d,moonContainer);
   if(currentPage==='moon')renderMoonFull(d,document.getElementById('moonPageSection'));
+  // Set the date picker to the loaded date
+  const picker=document.getElementById('apodDatePicker');
+  if(picker)picker.value=apodData.date||todayUTC();
 }
 function renderAPOD(data,sec){
   const isImg=data.media_type==='image';
@@ -540,26 +566,37 @@ async function fetchMarsLatest(rover){
   const sec=document.getElementById('marsSection');
   sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Fetching photos from ${rover}…</span></div>`;
 
-  // Retired rovers don't have a /latest_photos endpoint — use their final sol
+  // Retired rovers — /latest_photos returns 404, use their final known sol
   if(RETIRED_ROVERS[rover]){
     const finalSol=RETIRED_ROVERS[rover].finalSol;
     document.getElementById('solInput').value=finalSol;
     return fetchMarsBySol(rover, finalSol);
   }
 
-  // Active rovers: use /latest_photos
+  // Try /latest_photos first (fastest path)
   const{ok,status,data}=await apiFetch(`${NASA}/mars-photos/api/v1/rovers/${rover}/latest_photos?api_key=${API_KEY}`);
-  if(!ok){
-    const msg=status===429||status===403
-      ?`Rate limit reached. <a href="https://api.nasa.gov" target="_blank" style="color:var(--accent)">Get a free API key</a> for more requests.`
-      :`API error (${status||'network'}). Check your API key or try again.`;
-    sec.innerHTML=`<div class="err-banner">${msg}</div>`;return;
+  if(ok && data.latest_photos?.length){
+    const photos=data.latest_photos;
+    const usedSol=photos[0]?.sol||'?';
+    document.getElementById('solInput').value=usedSol;
+    renderMarsPhotos(photos,rover,usedSol,sec);
+    return;
   }
-  const photos=(data.latest_photos||[]);
-  if(!photos.length){sec.innerHTML=`<div class="empty-msg">No recent photos for ${rover}.<br>Try a different rover.</div>`;return;}
-  const usedSol=photos[0]?.sol||'?';
-  document.getElementById('solInput').value=usedSol;
-  renderMarsPhotos(photos,rover,usedSol,sec);
+
+  // /latest_photos is flaky — fall back to the manifest to get the real max_sol
+  sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Checking rover manifest…</span></div>`;
+  const{ok:mok,data:mdata}=await apiFetch(`${NASA}/mars-photos/api/v1/manifests/${rover}?api_key=${API_KEY}`);
+  if(mok && mdata.photo_manifest?.max_sol){
+    const maxSol=mdata.photo_manifest.max_sol;
+    document.getElementById('solInput').value=maxSol;
+    return fetchMarsBySol(rover, maxSol);
+  }
+
+  // Total fallback: well-known working sols per rover
+  const fallbackSols={curiosity:4000, perseverance:800};
+  const fallSol=fallbackSols[rover]||1000;
+  document.getElementById('solInput').value=fallSol;
+  return fetchMarsBySol(rover, fallSol);
 }
 
 async function fetchMarsBySol(rover,sol){
@@ -614,6 +651,23 @@ document.getElementById('solBtn').addEventListener('click',()=>{
 document.getElementById('latestBtn').addEventListener('click',()=>{
   const rover=document.getElementById('roverSelect').value;
   fetchMarsLatest(rover);
+});
+
+// APOD date picker — lets you browse any date back to June 16 1995
+document.addEventListener('DOMContentLoaded',()=>{
+  const picker=document.getElementById('apodDatePicker');
+  if(picker){picker.min='1995-06-16';picker.max=todayUTC();}
+});
+document.getElementById('apodDateBtn').addEventListener('click',()=>{
+  const v=document.getElementById('apodDatePicker').value;
+  if(v)fetchAPOD(v);
+});
+document.getElementById('apodTodayBtn').addEventListener('click',()=>{
+  document.getElementById('apodDatePicker').value=todayUTC();
+  fetchAPOD();
+});
+document.getElementById('apodDatePicker').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){const v=e.target.value;if(v)fetchAPOD(v);}
 });
 
 function loadPlaylists(){
