@@ -311,14 +311,10 @@ input,textarea{font-family:var(--sans)}
 .moon-sphere-col{display:flex;flex-direction:column;align-items:center;gap:1rem}
 .moon-sphere{
   width:130px;height:130px;border-radius:50%;
-  background:radial-gradient(circle at 35% 38%, #f0f0f0, #c8c8c8 55%, #888 85%, #555);
-  position:relative;overflow:hidden;
-  flex-shrink:0;
+  position:relative;overflow:hidden;flex-shrink:0;
+  background:#1a1a1a;
 }
-.moon-shadow-layer{
-  position:absolute;inset:0;border-radius:50%;
-  background:var(--bg);transition:all .7s ease;
-}
+.moon-shadow-layer{display:none}
 .moon-name{
   font-family:var(--serif);font-size:1.1rem;font-weight:700;
   text-align:center;
@@ -1028,7 +1024,6 @@ function renderMoon(date,container){
   const age=lunarAge(date);
   const pct=(age/29.53)*100;
   const phase=PHASES.find(p=>age>=p.min&&age<p.max)||PHASES[0];
-  /* Use a unique suffix per container so IDs never clash between home and moon page */
   const uid=container.id||('moon-'+Date.now());
   const shadowId='moonShadow-'+uid;
   const trackId='moonTrack-'+uid;
@@ -1039,9 +1034,7 @@ function renderMoon(date,container){
   container.innerHTML=`
     <div class="moon-wrap">
       <div class="moon-sphere-col">
-        <div class="moon-sphere">
-          <div class="moon-shadow-layer" id="${shadowId}"></div>
-        </div>
+        <div class="moon-sphere" id="${shadowId}"></div>
         <div class="moon-name">${phase.n}</div>
         <div class="moon-sub">Day ${age.toFixed(1)} of 29.5</div>
       </div>
@@ -1054,7 +1047,6 @@ function renderMoon(date,container){
         <div class="phases-row">${chipsHtml}</div>
       </div>
     </div>`;
-  /* Use requestAnimationFrame so the DOM is fully painted before we mutate it */
   requestAnimationFrame(()=>{
     const tf=document.getElementById(trackId);
     if(tf)tf.style.width=pct+'%';
@@ -1065,24 +1057,111 @@ function renderMoonFull(date,container){
   renderMoon(date,container);
 }
 function applyMoonShadow(id,age){
-  const el=document.getElementById(id);
-  if(!el)return;
-  if(age<1||age>28.5){
-    el.style.cssText='position:absolute;inset:0;border-radius:50%;background:var(--bg)';
+  /* Find the .moon-sphere parent of the shadow element */
+  const shadow=document.getElementById(id);
+  if(!shadow)return;
+  const sphere=shadow.parentElement;
+  if(!sphere)return;
+
+  const R=65; /* SVG radius */
+  const C=65; /* SVG center */
+  const S=130;/* SVG size */
+  const BG='#121212';
+  const LIT0='#f0f0f0';
+  const LIT1='#c8c8c8';
+  const LIT2='#909090';
+  const LIT3='#585858';
+
+  /* Clamp age */
+  const a=Math.max(0,Math.min(29.53,age));
+
+  /* For the terminator: how far the ellipse centre-x shifts.
+     waxing: light on left, shadow sweeps from right to left
+     waning: light on right, shadow sweeps from left to right      */
+  const waxing = a < 14.77;
+  /* p: 0 at new moon, 1 at full moon (both phases) */
+  const p = waxing ? a/14.77 : (29.53-a)/14.77;
+
+  /* rx = x-radius of the terminator ellipse (0=half-moon, R=new/full) */
+  const rx = R * Math.abs(1 - 2*p);
+  /* which direction does the ellipse bulge? */
+  const bulgeLeft = waxing ? (p < 0.5) : (p > 0.5);
+
+  /* Build the lit-side path:
+     Always a full right or left semicircle, plus a closing ellipse arc */
+  let path = '';
+  if(a <= 1){
+    /* New moon — fully dark, no lit area */
+    sphere.innerHTML=`<svg width="${S}" height="${S}" viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="${C}" cy="${C}" r="${R}" fill="${BG}"/>
+    </svg>`;
     return;
   }
-  if(age>14.4&&age<14.9){
-    el.style.cssText='position:absolute;inset:0;border-radius:50%;background:transparent';
+  if(a >= 14.4 && a <= 15.1){
+    /* Full moon */
+    sphere.innerHTML=`<svg width="${S}" height="${S}" viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="mg" cx="38%" cy="36%" r="60%">
+          <stop offset="0%" stop-color="${LIT0}"/>
+          <stop offset="45%" stop-color="${LIT1}"/>
+          <stop offset="78%" stop-color="${LIT2}"/>
+          <stop offset="100%" stop-color="${LIT3}"/>
+        </radialGradient>
+      </defs>
+      <circle cx="${C}" cy="${C}" r="${R}" fill="url(#mg)"/>
+    </svg>`;
     return;
   }
-  const waxing=age<14.77;
-  const pct2=waxing?age/14.77:(age-14.77)/14.77;
-  const w=50+pct2*50;
-  if(waxing){
-    el.style.cssText=`position:absolute;top:0;bottom:0;right:0;width:${w}%;border-radius:${50+pct2*50}% ${50-pct2*50}% ${50-pct2*50}% ${50+pct2*50}%;background:var(--bg)`;
-  }else{
-    el.style.cssText=`position:absolute;top:0;bottom:0;left:0;width:${w}%;border-radius:${50-pct2*50}% ${50+pct2*50}% ${50+pct2*50}% ${50-pct2*50}%;background:var(--bg)`;
+  if(a >= 28.5){
+    /* Near new moon — fully dark */
+    sphere.innerHTML=`<svg width="${S}" height="${S}" viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="${C}" cy="${C}" r="${R}" fill="${BG}"/>
+    </svg>`;
+    return;
   }
+
+  /* General case: partial moon
+     The lit area is always one semicircle (left for waxing, right for waning)
+     plus an ellipse arc that forms the terminator.
+     We draw the lit region as an SVG path then fill the rest dark.            */
+
+  /* Waxing: lit on LEFT side. Waning: lit on RIGHT side. */
+  const litLeft = waxing;
+
+  /* Terminator ellipse: vertical axis = R, horizontal axis = rx
+     Bulges toward the dark side when crescent, toward lit side when gibbous  */
+  const sweep = litLeft
+    ? (p < 0.5 ? 0 : 1)   /* waxing crescent: ellipse opens right; gibbous: opens left */
+    : (p < 0.5 ? 1 : 0);  /* waning crescent: ellipse opens left; gibbous: opens right */
+
+  /* SVG path for the lit region inside the moon circle */
+  /* Start at top (C, C-R), draw semicircle on lit side, then ellipse back */
+  let litPath;
+  if(litLeft){
+    /* Left semicircle: top → bottom going left */
+    litPath = `M ${C} ${C-R} A ${R} ${R} 0 0 0 ${C} ${C+R} A ${rx} ${R} 0 0 ${sweep} ${C} ${C-R} Z`;
+  } else {
+    /* Right semicircle: top → bottom going right */
+    litPath = `M ${C} ${C-R} A ${R} ${R} 0 0 1 ${C} ${C+R} A ${rx} ${R} 0 0 ${1-sweep} ${C} ${C-R} Z`;
+  }
+
+  sphere.innerHTML=`<svg width="${S}" height="${S}" viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="mg${id}" cx="38%" cy="36%" r="60%">
+        <stop offset="0%" stop-color="${LIT0}"/>
+        <stop offset="45%" stop-color="${LIT1}"/>
+        <stop offset="78%" stop-color="${LIT2}"/>
+        <stop offset="100%" stop-color="${LIT3}"/>
+      </radialGradient>
+      <clipPath id="mc${id}">
+        <circle cx="${C}" cy="${C}" r="${R}"/>
+      </clipPath>
+    </defs>
+    <!-- dark background (shadow side) -->
+    <circle cx="${C}" cy="${C}" r="${R}" fill="${BG}"/>
+    <!-- lit crescent/gibbous -->
+    <path d="${litPath}" fill="url(#mg${id})" clip-path="url(#mc${id})"/>
+  </svg>`;
 }
 
 /* ============================================================
