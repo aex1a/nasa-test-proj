@@ -947,16 +947,43 @@ function formatDate(str){
    ============================================================ */
 async function fetchAPOD(){
   const sec=document.getElementById('apodSection');
-  const{ok,data}=await apiFetch(`${NASA}/planetary/apod?api_key=${API_KEY}`);
-  if(!ok){
-    sec.innerHTML=`<div class="err-banner">Couldn't load today's image. Check your API key or try again later.</div>`;
-    renderMoon(new Date(),document.getElementById('moonSection'));
+
+  /* Try today first, then fall back to previous days (handles DEMO_KEY rate limits) */
+  let apodData=null;
+  for(let offset=0;offset<=5;offset++){
+    const d=new Date();
+    d.setUTCDate(d.getUTCDate()-offset);
+    const dateStr=d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');
+    const res=await apiFetch(NASA+'/planetary/apod?api_key='+API_KEY+'&date='+dateStr);
+    if(res.ok&&res.data.title){apodData=res.data;break;}
+  }
+
+  const moonContainer=document.getElementById('moonSection');
+  if(!apodData){
+    sec.innerHTML=`
+      <div class="apod-hero">
+        <div class="apod-img-wrap" style="background:var(--surface2);display:flex;align-items:center;justify-content:center;min-height:260px;">
+          <div style="text-align:center;color:var(--text3);padding:2rem">
+            <div style="font-size:2.5rem;margin-bottom:.75rem">&#127756;</div>
+            <div style="font-size:.92rem;font-weight:600;color:var(--text2);margin-bottom:.4rem">NASA image unavailable right now</div>
+            <div style="font-size:.78rem;line-height:1.6">Rate limit reached — use a free key from<br><a href="https://api.nasa.gov" target="_blank" style="color:var(--accent)">api.nasa.gov</a> for full access</div>
+          </div>
+        </div>
+        <div class="apod-info">
+          <h1>The Universe Awaits</h1>
+          <p class="apod-desc">NASA's Astronomy Picture of the Day showcases a different image of our universe each day, along with a brief explanation written by a professional astronomer. Enter a valid API key to load today's image.</p>
+          <p class="apod-credit">NASA — api.nasa.gov</p>
+        </div>
+      </div>`;
+    moonData=new Date();
+    renderMoon(moonData,moonContainer);
     return;
   }
-  renderAPOD(data,sec);
-  const d=data.date?new Date(data.date+'T12:00:00Z'):new Date();
+
+  renderAPOD(apodData,sec);
+  const d=apodData.date?new Date(apodData.date+'T12:00:00Z'):new Date();
   moonData=d;
-  renderMoon(d,document.getElementById('moonSection'));
+  renderMoon(d,moonContainer);
   if(currentPage==='moon')renderMoonFull(d,document.getElementById('moonPageSection'));
 }
 function renderAPOD(data,sec){
@@ -1001,6 +1028,10 @@ function renderMoon(date,container){
   const age=lunarAge(date);
   const pct=(age/29.53)*100;
   const phase=PHASES.find(p=>age>=p.min&&age<p.max)||PHASES[0];
+  /* Use a unique suffix per container so IDs never clash between home and moon page */
+  const uid=container.id||('moon-'+Date.now());
+  const shadowId='moonShadow-'+uid;
+  const trackId='moonTrack-'+uid;
   const chipsHtml=PHASES.map(p=>`
     <div class="phase-chip${p.n===phase.n?' active':''}">
       <span class="pe">${p.e}</span>${p.n.split(' ').slice(-1)[0]}
@@ -1008,8 +1039,8 @@ function renderMoon(date,container){
   container.innerHTML=`
     <div class="moon-wrap">
       <div class="moon-sphere-col">
-        <div class="moon-sphere" id="moonSphereEl">
-          <div class="moon-shadow-layer" id="moonShadowEl"></div>
+        <div class="moon-sphere">
+          <div class="moon-shadow-layer" id="${shadowId}"></div>
         </div>
         <div class="moon-name">${phase.n}</div>
         <div class="moon-sub">Day ${age.toFixed(1)} of 29.5</div>
@@ -1017,17 +1048,18 @@ function renderMoon(date,container){
       <div class="moon-data">
         <div>
           <div class="moon-progress-label"><span>Cycle Progress</span><span>${Math.round(pct)}%</span></div>
-          <div class="track"><div class="track-fill" id="moonTrack" style="width:0%"></div></div>
+          <div class="track"><div class="track-fill" id="${trackId}" style="width:0%"></div></div>
           <div class="track-ends"><span>New</span><span>Full</span><span>New</span></div>
         </div>
         <div class="phases-row">${chipsHtml}</div>
       </div>
     </div>`;
-  setTimeout(()=>{
-    const tf=document.getElementById('moonTrack');
+  /* Use requestAnimationFrame so the DOM is fully painted before we mutate it */
+  requestAnimationFrame(()=>{
+    const tf=document.getElementById(trackId);
     if(tf)tf.style.width=pct+'%';
-  },100);
-  applyMoonShadow('moonShadowEl',age);
+    applyMoonShadow(shadowId,age);
+  });
 }
 function renderMoonFull(date,container){
   renderMoon(date,container);
