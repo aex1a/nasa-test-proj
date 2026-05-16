@@ -649,9 +649,6 @@ input,textarea{font-family:var(--sans)}
 </head>
 <body>
 
-<!-- ============================================================
-     API KEY SCREEN
-     ============================================================ -->
 <div id="keyScreen">
   <div class="key-box">
     <div class="key-wordmark">Cosmos<span>.</span></div>
@@ -669,12 +666,8 @@ input,textarea{font-family:var(--sans)}
   </div>
 </div>
 
-<!-- ============================================================
-     APP SHELL
-     ============================================================ -->
 <div id="app">
 
-  <!-- SIDEBAR -->
   <nav class="sidebar">
     <div class="sidebar-logo">Cosmos<span>.</span></div>
     <div class="nav-section-label">Explore</div>
@@ -688,7 +681,6 @@ input,textarea{font-family:var(--sans)}
     <div class="sidebar-playlists" id="sidebarPlaylists"></div>
   </nav>
 
-  <!-- TOPBAR -->
   <div class="topbar">
     <div class="topbar-title" id="topbarTitle">Today in Space</div>
     <div class="topbar-live">
@@ -697,10 +689,8 @@ input,textarea{font-family:var(--sans)}
     </div>
   </div>
 
-  <!-- CONTENT -->
   <div class="content">
 
-    <!-- PAGE: HOME -->
     <div class="page active" id="page-home">
 
       <div class="section-gap">
@@ -719,7 +709,6 @@ input,textarea{font-family:var(--sans)}
 
     </div>
 
-    <!-- PAGE: MOON -->
     <div class="page" id="page-moon">
       <div class="sec-head"><h2>Lunar Cycle Tracker</h2></div>
       <div id="moonPageSection">
@@ -727,7 +716,6 @@ input,textarea{font-family:var(--sans)}
       </div>
     </div>
 
-    <!-- PAGE: ASTEROIDS -->
     <div class="page" id="page-asteroids">
       <div class="sec-head"><h2>Asteroids Passing Earth</h2></div>
       <div id="neoSection">
@@ -735,7 +723,6 @@ input,textarea{font-family:var(--sans)}
       </div>
     </div>
 
-    <!-- PAGE: MARS -->
     <div class="page" id="page-mars">
       <div class="sec-head"><h2>Mars Rover Gallery</h2></div>
       <div class="mars-controls">
@@ -748,7 +735,6 @@ input,textarea{font-family:var(--sans)}
       </div>
     </div>
 
-    <!-- PAGE: PLAYLISTS -->
     <div class="page" id="page-playlists">
       <div class="sec-head">
         <h2>Space Playlists</h2>
@@ -757,7 +743,6 @@ input,textarea{font-family:var(--sans)}
       <div class="pl-scroll" id="playlistScroll"></div>
     </div>
 
-    <!-- PAGE: PLAYLIST DETAIL (special) -->
     <div id="playlistDetailPage" style="display:none;padding-top:calc(var(--hdr) + 1rem)">
       <button class="btn-ghost" id="backToPlaylists" style="margin-bottom:1.5rem">← Back</button>
       <div class="pl-detail-hero">
@@ -775,10 +760,7 @@ input,textarea{font-family:var(--sans)}
       </div>
     </div>
 
-  </div><!-- /content -->
-
-  <!-- BOTTOM NAV (mobile) -->
-  <div class="bottom-nav">
+  </div><div class="bottom-nav">
     <button class="bottom-nav-item active" data-page="home">
       <span class="bottom-nav-dot"></span>Today
     </button>
@@ -796,10 +778,7 @@ input,textarea{font-family:var(--sans)}
     </button>
   </div>
 
-</div><!-- /app -->
-
-<!-- CREATE PLAYLIST MODAL -->
-<div class="modal-overlay" id="createModal" style="display:none">
+</div><div class="modal-overlay" id="createModal" style="display:none">
   <div class="modal-box">
     <h3>Create Playlist</h3>
     <div class="form-group">
@@ -825,7 +804,6 @@ input,textarea{font-family:var(--sans)}
   </div>
 </div>
 
-<!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
   <button class="lb-close" id="lbClose">&#x2715;</button>
   <img id="lbImg" src="" alt=""/>
@@ -839,7 +817,7 @@ input,textarea{font-family:var(--sans)}
 const NASA = 'https://api.nasa.gov';
 let API_KEY = '';
 let playlists = [];
-let moonData = null; // cached for reuse on moon page
+let moonData = null; 
 const ASTEROID_BG = [
   'https://images-assets.nasa.gov/image/PIA20180/PIA20180~thumb.jpg',
   'https://images-assets.nasa.gov/image/PIA17034/PIA17034~thumb.jpg',
@@ -886,16 +864,21 @@ const PAGE_TITLES = {
 /* ============================================================
    BOOT
    ============================================================ */
-const savedKey = localStorage.getItem('cosmos_api_key');
+let savedKey = '';
+try {
+  savedKey = localStorage.getItem('cosmos_api_key');
+} catch(e) {}
+
 if(savedKey){API_KEY=savedKey;bootApp()}
 
 document.getElementById('keyBtn').addEventListener('click',()=>{
   const v=document.getElementById('keyInput').value.trim();
   if(!v){document.getElementById('keyInput').style.borderColor='#e53935';return}
   API_KEY=v;
-  localStorage.setItem('cosmos_api_key',API_KEY);
+  try { localStorage.setItem('cosmos_api_key',API_KEY); } catch(e) {}
   bootApp();
 });
+
 document.getElementById('keyInput').addEventListener('keydown',e=>{
   if(e.key==='Enter')document.getElementById('keyBtn').click();
 });
@@ -924,23 +907,18 @@ function initNav(){
   });
 }
 function showPage(name){
-  // hide detail page
   document.getElementById('playlistDetailPage').style.display='none';
-  // update nav
   document.querySelectorAll('.nav-item[data-page]').forEach(el=>{
     el.classList.toggle('active',el.dataset.page===name);
   });
   document.querySelectorAll('.bottom-nav-item[data-page]').forEach(el=>{
     el.classList.toggle('active',el.dataset.page===name);
   });
-  // show page
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const pg=document.getElementById('page-'+name);
   if(pg)pg.classList.add('active');
-  // update topbar
   document.getElementById('topbarTitle').textContent=PAGE_TITLES[name]||name;
   currentPage=name;
-  // lazy-init
   if(name==='moon'&&moonData)renderMoonFull(moonData,document.getElementById('moonPageSection'));
 }
 
@@ -1126,12 +1104,11 @@ async function fetchNEO(){
 }
 
 /* ============================================================
-   MARS ROVER — WITH ROBUST FALLBACK
+   MARS ROVER
    ============================================================ */
 async function fetchMarsWithFallback(sol){
   const sec=document.getElementById('marsSection');
   sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Receiving signals from Mars…</span></div>`;
-  // Try the given sol, then walk back to find photos
   let photos=[];
   let usedSol=sol;
   for(let attempt=0;attempt<20;attempt++){
@@ -1144,7 +1121,6 @@ async function fetchMarsWithFallback(sol){
       photos=data.photos;usedSol=trySol;break;
     }
   }
-  // Last resort: use latest_photos endpoint
   if(!photos.length){
     const{ok,data}=await apiFetch(
       `${NASA}/mars-photos/api/v1/rovers/curiosity/latest_photos?api_key=${API_KEY}`
@@ -1163,11 +1139,15 @@ async function fetchMarsWithFallback(sol){
       Showing ${Math.min(photos.length,24)} photos from Sol ${usedSol}
     </p>
     <div class="mars-gallery">
-      ${photos.slice(0,24).map(p=>`
-        <div class="mars-photo" onclick="openLB('${p.img_src}','${p.camera.full_name} · Sol ${p.sol} · ${p.earth_date}')">
+      ${photos.slice(0,24).map(p=>{
+        // Escape backslashes and single quotes for the inline onclick handler
+        const safeCaption = (`${p.camera.full_name} · Sol ${p.sol} · ${p.earth_date}`).replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+        return `
+        <div class="mars-photo" onclick="openLB('${p.img_src}','${safeCaption}')">
           <img src="${p.img_src}" alt="${p.camera.name}" loading="lazy"/>
           <div class="mars-label">${p.camera.name}</div>
-        </div>`).join('')}
+        </div>`
+      }).join('')}
     </div>`;
 }
 
@@ -1184,13 +1164,12 @@ function loadPlaylists(){
     const stored=localStorage.getItem('cosmos_playlists');
     playlists=stored?JSON.parse(stored):[...DEFAULT_PLAYLISTS];
   }catch{playlists=[...DEFAULT_PLAYLISTS]}
-  // Always include defaults if not present
   DEFAULT_PLAYLISTS.forEach(def=>{
     if(!playlists.find(p=>p.id===def.id))playlists.unshift(def);
   });
 }
 function savePlaylists(){
-  localStorage.setItem('cosmos_playlists',JSON.stringify(playlists));
+  try { localStorage.setItem('cosmos_playlists',JSON.stringify(playlists)); } catch(e) {}
 }
 
 function renderPlaylists(){
@@ -1201,6 +1180,7 @@ function renderPlaylists(){
     <div class="sidebar-pl-item" onclick="openPlaylistDetail('${pl.id}')">${pl.title}</div>`).join('');
 }
 function plCard(pl){
+  const delBtn = pl.isDefault ? '' : `<button class="pl-delete" onclick="deletePlaylist(event,'${pl.id}')">&#x2715;</button>`;
   return`
   <div class="pl-card" data-id="${pl.id}">
     <div class="pl-cover">
@@ -1213,7 +1193,7 @@ function plCard(pl){
     </div>
     <div class="pl-title">${pl.title}</div>
     <div class="pl-desc">${pl.desc||''}</div>
-    ${pl.isDefault?'':'<button class="pl-delete" onclick="deletePlaylist(event,\''+pl.id+'\')">&#x2715;</button>'}
+    ${delBtn}
   </div>`;
 }
 document.getElementById('playlistScroll').addEventListener('click',e=>{
@@ -1233,11 +1213,9 @@ async function openPlaylistDetail(id){
   document.getElementById('detailTitle').textContent=pl.title;
   document.getElementById('detailDesc').textContent=pl.desc||'';
   document.getElementById('detailMeta').textContent=`Created ${new Date(pl.created).toLocaleDateString()}`;
-  // Update sidebar active
   document.querySelectorAll('.sidebar-pl-item').forEach(el=>el.classList.remove('active'));
   const items=document.querySelectorAll('.sidebar-pl-item');
   items.forEach(el=>{if(el.textContent===pl.title)el.classList.add('active')});
-  // Load NASA images
   const dc=document.getElementById('detailContent');
   dc.innerHTML=`<div class="loader"><div class="spin"></div><span>Loading photos…</span></div>`;
   const query=pl.query||pl.title;
@@ -1251,12 +1229,14 @@ async function openPlaylistDetail(id){
   const items2=data.collection.items.slice(0,24);
   dc.innerHTML=items2.map(item=>{
     const img=item.links?.[0]?.href||'';
-    const title=item.data?.[0]?.title||'';
-    const desc=item.data?.[0]?.description||'';
+    const rawTitle=item.data?.[0]?.title||'';
+    // EXACT FIX: Properly escape backslashes, single quotes, and double quotes for the inline onclick handler
+    const safeTitle = rawTitle.replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, "&quot;");
+    
     return`
-      <div class="mars-photo" onclick="openLB('${img}','${title.replace(/'/g,'\\'')}')">
-        <img src="${img}" alt="${title}" loading="lazy"/>
-        <div class="mars-label">${title.slice(0,40)}</div>
+      <div class="mars-photo" onclick="openLB('${img}','${safeTitle}')">
+        <img src="${img}" alt="${safeTitle}" loading="lazy"/>
+        <div class="mars-label">${rawTitle.slice(0,40)}</div>
       </div>`;
   }).join('');
 }
@@ -1326,7 +1306,7 @@ document.getElementById('savePlaylist').addEventListener('click',()=>{
    ============================================================ */
 function openLB(src,caption){
   document.getElementById('lbImg').src=src;
-  document.getElementById('lbCaption').textContent=caption;
+  document.getElementById('lbCaption').innerHTML=caption;
   document.getElementById('lightbox').classList.add('open');
 }
 document.getElementById('lbClose').addEventListener('click',()=>{
