@@ -1106,11 +1106,19 @@ async function fetchNEO(){
 /* ============================================================
    MARS ROVER
    ============================================================ */
+/* NASA Mars API returns http:// URLs — force https:// to avoid mixed-content blocks */
+function marsHttps(url){
+  if(!url)return url;
+  return url.replace(/^http:\/\//i,'https://');
+}
+
 async function fetchMarsWithFallback(sol){
   const sec=document.getElementById('marsSection');
   sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Receiving signals from Mars…</span></div>`;
   let photos=[];
   let usedSol=sol;
+
+  /* Try the requested sol, then walk back in steps of 50 up to 20 attempts */
   for(let attempt=0;attempt<20;attempt++){
     const trySol=sol-attempt*50;
     if(trySol<1)break;
@@ -1121,6 +1129,8 @@ async function fetchMarsWithFallback(sol){
       photos=data.photos;usedSol=trySol;break;
     }
   }
+
+  /* Final fallback: use the /latest_photos endpoint */
   if(!photos.length){
     const{ok,data}=await apiFetch(
       `${NASA}/mars-photos/api/v1/rovers/curiosity/latest_photos?api_key=${API_KEY}`
@@ -1130,23 +1140,27 @@ async function fetchMarsWithFallback(sol){
       usedSol=photos[0]?.sol||'latest';
     }
   }
+
   if(!photos.length){
     sec.innerHTML=`<div class="empty-msg">No Mars photos found right now.<br>Try a different Sol number.</div>`;
     return;
   }
+
   sec.innerHTML=`
     <p style="font-size:.78rem;color:var(--text3);margin-bottom:1rem">
       Showing ${Math.min(photos.length,24)} photos from Sol ${usedSol}
     </p>
     <div class="mars-gallery">
       ${photos.slice(0,24).map(p=>{
-        // Escape backslashes and single quotes for the inline onclick handler
+        /* Force https so browsers don't block mixed-content images */
+        const src=marsHttps(p.img_src);
         const safeCaption = (`${p.camera.full_name} · Sol ${p.sol} · ${p.earth_date}`).replace(/\\/g,"\\\\").replace(/'/g,"\\'");
         return `
-        <div class="mars-photo" onclick="openLB('${p.img_src}','${safeCaption}')">
-          <img src="${p.img_src}" alt="${p.camera.name}" loading="lazy"/>
+        <div class="mars-photo" onclick="openLB('${src}','${safeCaption}')">
+          <img src="${src}" alt="${p.camera.name}" loading="lazy"
+               onerror="this.closest('.mars-photo').style.display='none'"/>
           <div class="mars-label">${p.camera.name}</div>
-        </div>`
+        </div>`;
       }).join('')}
     </div>`;
 }
