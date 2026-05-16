@@ -204,6 +204,10 @@ input,textarea{font-family:var(--sans)}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px}
 .section-gap{margin-bottom:3rem}
+
+/* Date display badge */
+.neo-date-badge{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border-radius:500px;padding:4px 12px;font-size:.72rem;font-weight:600;color:var(--text2);margin-bottom:1.25rem;}
+.neo-date-badge span{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -399,16 +403,40 @@ async function apiFetch(url){
   try{const r=await fetch(url);const d=await r.json().catch(()=>({}));return{ok:r.ok,status:r.status,data:d};}
   catch(e){return{ok:false,status:0,data:{}};}
 }
-function todayStr(){const d=new Date();return`${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;}
+
+// ─── DYNAMIC DATE HELPERS ───────────────────────────────────────────────────
+// Always returns today's date in UTC as YYYY-MM-DD.
+// Using UTC prevents the date from flipping incorrectly near midnight
+// depending on the visitor's local timezone.
+function todayUTC() {
+  const d = new Date();
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+// Returns a UTC date string offset by `offsetDays` from today (negative = past).
+function utcDateOffset(offsetDays) {
+  const d = new Date();
+  d.setUTCDate(d.getUTCDate() + offsetDays);
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+// Human-readable date from a YYYY-MM-DD string
 function formatDate(str){if(!str)return'';const d=new Date(str+'T12:00:00Z');return d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});}
+// ────────────────────────────────────────────────────────────────────────────
 
 async function fetchAPOD(){
   const sec=document.getElementById('apodSection');
   const moonContainer=document.getElementById('moonSection');
   let apodData=null;
+  // Try today first, then fall back up to 5 days ago if NASA hasn't published yet
   for(let offset=0;offset<=5;offset++){
-    const d=new Date();d.setUTCDate(d.getUTCDate()-offset);
-    const dateStr=d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');
+    const dateStr = utcDateOffset(-offset);
     const res=await apiFetch(NASA+'/planetary/apod?api_key='+API_KEY+'&date='+dateStr);
     if(res.ok&&res.data.title){apodData=res.data;break;}
   }
@@ -453,13 +481,43 @@ function applyMoonShadow(id,age){
 }
 
 async function fetchNEO(){
-  const sec=document.getElementById('neoSection');const t=todayStr();
-  const{ok,data}=await apiFetch(`${NASA}/neo/rest/v1/feed?start_date=${t}&end_date=${t}&api_key=${API_KEY}`);
-  if(!ok){sec.innerHTML=`<div class="err-banner">Couldn't load asteroid data.</div>`;return;}
+  const sec=document.getElementById('neoSection');
+
+  // ── Dynamic date: always fetch for the current UTC day ──
+  const today = todayUTC();
+
+  sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Scanning near-Earth space…</span></div>`;
+
+  const{ok,data}=await apiFetch(`${NASA}/neo/rest/v1/feed?start_date=${today}&end_date=${today}&api_key=${API_KEY}`);
+  if(!ok){sec.innerHTML=`<div class="err-banner">Couldn't load asteroid data. Please check your API key or try again shortly.</div>`;return;}
   const all=Object.values(data.near_earth_objects||{}).flat();
   const haz=all.filter(n=>n.is_potentially_hazardous_asteroid);
   const closest=all.length?Math.min(...all.map(n=>parseFloat(n.close_approach_data[0]?.miss_distance?.kilometers||Infinity))):0;
-  sec.innerHTML=`<div class="neo-stats-row"><div class="neo-stat"><span class="neo-stat-val">${all.length}</span><span class="neo-stat-lbl">Passing Today</span></div><div class="neo-stat"><span class="neo-stat-val${haz.length?' danger':''}">${haz.length}</span><span class="neo-stat-lbl">Flagged Watch</span></div><div class="neo-stat"><span class="neo-stat-val" style="font-size:1.7rem">${closest?closest.toLocaleString(undefined,{maximumFractionDigits:0}):'—'} <small style="font-size:.9rem;color:var(--text3)">km</small></span><span class="neo-stat-lbl">Closest Pass</span></div></div><div class="neo-grid">${all.slice(0,9).map((n,i)=>{const ca=n.close_approach_data[0]||{};const dMin=n.estimated_diameter?.kilometers?.estimated_diameter_min?.toFixed(3)||'?';const dMax=n.estimated_diameter?.kilometers?.estimated_diameter_max?.toFixed(3)||'?';const miss=parseFloat(ca.miss_distance?.kilometers||0).toLocaleString(undefined,{maximumFractionDigits:0});const vel=parseFloat(ca.relative_velocity?.kilometers_per_hour||0).toLocaleString(undefined,{maximumFractionDigits:0});return`<div class="neo-card${n.is_potentially_hazardous_asteroid?' haz':''}"><div class="neo-thumb"><img src="${ASTEROID_BG[i%ASTEROID_BG.length]}" alt="Asteroid" loading="lazy"/>${n.is_potentially_hazardous_asteroid?'<span class="haz-pill">Watch</span>':''}</div><div class="neo-body"><div class="neo-name">${n.name.replace(/[()]/g,'')}</div><div class="neo-row"><span>Estimated size</span><strong>${dMin}–${dMax} km</strong></div><div class="neo-row"><span>Miss distance</span><strong>${miss} km</strong></div><div class="neo-row"><span>Speed</span><strong>${vel} km/h</strong></div></div></div>`;}).join('')}</div>`;
+
+  sec.innerHTML=`
+    <div class="neo-date-badge">Showing data for <span>${formatDate(today)}</span> · updates automatically each day</div>
+    <div class="neo-stats-row">
+      <div class="neo-stat"><span class="neo-stat-val">${all.length}</span><span class="neo-stat-lbl">Passing Today</span></div>
+      <div class="neo-stat"><span class="neo-stat-val${haz.length?' danger':''}">${haz.length}</span><span class="neo-stat-lbl">Flagged Watch</span></div>
+      <div class="neo-stat"><span class="neo-stat-val" style="font-size:1.7rem">${closest?closest.toLocaleString(undefined,{maximumFractionDigits:0}):'—'} <small style="font-size:.9rem;color:var(--text3)">km</small></span><span class="neo-stat-lbl">Closest Pass</span></div>
+    </div>
+    <div class="neo-grid">${all.slice(0,9).map((n,i)=>{
+      const ca=n.close_approach_data[0]||{};
+      const dMin=n.estimated_diameter?.kilometers?.estimated_diameter_min?.toFixed(3)||'?';
+      const dMax=n.estimated_diameter?.kilometers?.estimated_diameter_max?.toFixed(3)||'?';
+      const miss=parseFloat(ca.miss_distance?.kilometers||0).toLocaleString(undefined,{maximumFractionDigits:0});
+      const vel=parseFloat(ca.relative_velocity?.kilometers_per_hour||0).toLocaleString(undefined,{maximumFractionDigits:0});
+      return`<div class="neo-card${n.is_potentially_hazardous_asteroid?' haz':''}">
+        <div class="neo-thumb"><img src="${ASTEROID_BG[i%ASTEROID_BG.length]}" alt="Asteroid" loading="lazy"/>
+        ${n.is_potentially_hazardous_asteroid?'<span class="haz-pill">Watch</span>':''}</div>
+        <div class="neo-body">
+          <div class="neo-name">${n.name.replace(/[()]/g,'')}</div>
+          <div class="neo-row"><span>Estimated size</span><strong>${dMin}–${dMax} km</strong></div>
+          <div class="neo-row"><span>Miss distance</span><strong>${miss} km</strong></div>
+          <div class="neo-row"><span>Speed</span><strong>${vel} km/h</strong></div>
+        </div>
+      </div>`;
+    }).join('')}</div>`;
 }
 
 function marsHttps(url){if(!url)return url;return url.replace(/^http:\/\//i,'https://');}
