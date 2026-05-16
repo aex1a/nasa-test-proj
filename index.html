@@ -555,78 +555,66 @@ async function fetchNEO(){
 
 function marsHttps(url){if(!url)return url;return url.replace(/^http:\/\//i,'https://');}
 
-// Rovers that are no longer active — NASA's /latest_photos endpoint 404s for these.
-// We must query by a known final sol instead.
-const RETIRED_ROVERS = {
-  opportunity: { finalSol: 5111 }, // last active sol before signal loss Feb 2019
-  spirit:      { finalSol: 2208 }, // last active sol before signal loss Mar 2010
+const RETIRED_ROVERS={
+  opportunity:{lastDate:'2019-02-13'},
+  spirit:{lastDate:'2010-03-22'},
 };
 
 async function fetchMarsLatest(rover){
   const sec=document.getElementById('marsSection');
   sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Fetching photos from ${rover}…</span></div>`;
 
-  // Retired rovers — /latest_photos returns 404, use their final known sol
-  if(RETIRED_ROVERS[rover]){
-    const finalSol=RETIRED_ROVERS[rover].finalSol;
-    document.getElementById('solInput').value=finalSol;
-    return fetchMarsBySol(rover, finalSol);
-  }
+  // For retired rovers, walk back from their last known earth date
+  const startDate = RETIRED_ROVERS[rover]
+    ? RETIRED_ROVERS[rover].lastDate
+    : utcDateOffset(0); // today for active rovers
 
-  // Try /latest_photos first (fastest path)
-  const{ok,status,data}=await apiFetch(`${NASA}/mars-photos/api/v1/rovers/${rover}/latest_photos?api_key=${API_KEY}`);
-  if(ok && data.latest_photos?.length){
-    const photos=data.latest_photos;
-    const usedSol=photos[0]?.sol||'?';
-    document.getElementById('solInput').value=usedSol;
-    renderMarsPhotos(photos,rover,usedSol,sec);
-    return;
-  }
+  await fetchMarsByDateWithFallback(rover, startDate, sec);
+}
 
-  // /latest_photos is flaky — fall back to the manifest to get the real max_sol
-  sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Checking rover manifest…</span></div>`;
-  const{ok:mok,data:mdata}=await apiFetch(`${NASA}/mars-photos/api/v1/manifests/${rover}?api_key=${API_KEY}`);
-  if(mok && mdata.photo_manifest?.max_sol){
-    const maxSol=mdata.photo_manifest.max_sol;
-    document.getElementById('solInput').value=maxSol;
-    return fetchMarsBySol(rover, maxSol);
-  }
+async function fetchMarsByDateWithFallback(rover, startDateStr, sec){
+  // Try up to 60 days back from startDate to find a day with photos
+  for(let offset=0; offset<60; offset++){
+    const d = new Date(startDateStr + 'T12:00:00Z');
+    d.setUTCDate(d.getUTCDate() - offset);
+    const dateStr = d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');
 
-  // Total fallback: well-known working sols per rover
-  const fallbackSols={curiosity:4000, perseverance:800};
-  const fallSol=fallbackSols[rover]||1000;
-  document.getElementById('solInput').value=fallSol;
-  return fetchMarsBySol(rover, fallSol);
+    const{ok,status,data}=await apiFetch(`${NASA}/mars-photos/api/v1/rovers/${rover}/photos?earth_date=${dateStr}&api_key=${API_KEY}`);
+
+    if(status===429||status===403){
+      sec.innerHTML=`<div class="err-banner">Rate limit reached with DEMO_KEY (30 req/hr).<br>Please <a href="https://api.nasa.gov" target="_blank" style="color:var(--accent)">get a free NASA API key</a> — it takes 30 seconds and gives you 1,000 requests/hour.</div>`;
+      return;
+    }
+    if(ok && data.photos?.length){
+      document.getElementById('solInput').value = data.photos[0].sol;
+      document.getElementById('solInput').placeholder = dateStr;
+      renderMarsPhotos(data.photos, rover, data.photos[0].sol, sec, dateStr);
+      return;
+    }
+  }
+  sec.innerHTML=`<div class="empty-msg">No photos found for ${rover} in the last 60 days.<br>Try a different rover.</div>`;
 }
 
 async function fetchMarsBySol(rover,sol){
   const sec=document.getElementById('marsSection');
   sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Fetching Sol ${sol} from ${rover}…</span></div>`;
   const{ok,status,data}=await apiFetch(`${NASA}/mars-photos/api/v1/rovers/${rover}/photos?sol=${sol}&api_key=${API_KEY}`);
-  if(!ok){
-    let msg;
-    if(status===429||status===403){
-      msg=`Rate limit reached with DEMO_KEY (30 req/hr). <a href="https://api.nasa.gov" target="_blank" style="color:var(--accent)">Get a free personal API key</a> — takes 30 seconds.`;
-    } else if(status===404){
-      msg=`Sol ${sol} not found for ${rover}. Try a different sol number, or click <strong>Latest</strong> to load confirmed photos.`;
-    } else {
-      msg=`API error (${status||'network error'}). Check your API key or internet connection.`;
-    }
-    sec.innerHTML=`<div class="err-banner">${msg}</div>`;return;
+  if(status===429||status===403){
+    sec.innerHTML=`<div class="err-banner">Rate limit reached. <a href="https://api.nasa.gov" target="_blank" style="color:var(--accent)">Get a free API key</a> for 1,000 req/hour.</div>`;return;
   }
-  const photos=(data.photos||[]);
-  if(!photos.length){
-    sec.innerHTML=`<div class="empty-msg">No photos on Sol ${sol} for ${rover}.<br>Not every sol has photos — try an adjacent number.<br><button class="btn btn-sm" style="margin-top:1rem" onclick="fetchMarsLatest('${rover}')">Load Latest Instead</button></div>`;
+  if(!ok||!data.photos?.length){
+    sec.innerHTML=`<div class="empty-msg">No photos on Sol ${sol} for ${rover}.<br>Not every sol has photos — try a nearby number or click <strong>Latest</strong>.<br><button class="btn btn-sm" style="margin-top:1rem" onclick="fetchMarsLatest('${rover}')">Load Latest</button></div>`;
     return;
   }
-  renderMarsPhotos(photos,rover,sol,sec);
+  renderMarsPhotos(data.photos,rover,sol,sec,'');
 }
 
-function renderMarsPhotos(photos,rover,sol,sec){
+function renderMarsPhotos(photos,rover,sol,sec,earthDate){
   const roverLabel=rover.charAt(0).toUpperCase()+rover.slice(1);
+  const dateLabel=earthDate?` · ${earthDate}`:'';
   sec.innerHTML=`
     <p style="font-size:.78rem;color:var(--text3);margin-bottom:1rem">
-      ${roverLabel} · Sol ${sol} · ${Math.min(photos.length,25)} photos
+      ${roverLabel} · Sol ${sol}${dateLabel} · ${Math.min(photos.length,25)} photos
     </p>
     <div class="mars-gallery">
       ${photos.slice(0,25).map(p=>{
