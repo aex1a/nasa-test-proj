@@ -130,17 +130,7 @@ input,textarea{font-family:var(--sans)}
 .neo-row{display:flex;justify-content:space-between;font-size:.78rem;color:var(--text2);margin-bottom:.28rem;}
 .neo-row strong{color:var(--text);font-weight:500}
 
-.mars-controls{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem;}
-.mars-controls label{font-size:.85rem;color:var(--text2);font-weight:500}
-.mars-controls input[type=number]{background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);color:var(--text);padding:.55rem .9rem;font-size:.88rem;outline:none;width:110px;transition:border-color .2s;}
-.mars-controls input:focus{border-color:var(--accent)}
-.mars-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:8px;}
-.mars-photo{position:relative;aspect-ratio:1;border-radius:var(--r);overflow:hidden;background:var(--surface);cursor:pointer;}
-.mars-photo img{width:100%;height:100%;object-fit:cover;transition:transform .35s,filter .35s;}
-.mars-photo:hover img{transform:scale(1.07);filter:brightness(1.1)}
-.mars-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.78));padding:.9rem .55rem .45rem;font-size:.62rem;color:rgba(255,255,255,.65);font-weight:500;}
-
-/* ── ALBUMS (was Playlists) ── */
+/* ── ALBUMS ── */
 .pl-scroll{display:flex;gap:1rem;overflow-x:auto;padding-bottom:1rem;scrollbar-width:thin;scrollbar-color:var(--surface3) transparent;}
 .pl-scroll::-webkit-scrollbar{height:4px}
 .pl-scroll::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px}
@@ -205,7 +195,6 @@ input,textarea{font-family:var(--sans)}
 ::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px}
 .section-gap{margin-bottom:3rem}
 
-/* Date display badge */
 .neo-date-badge{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border-radius:500px;padding:4px 12px;font-size:.72rem;font-weight:600;color:var(--text2);margin-bottom:1.25rem;}
 .neo-date-badge span{color:var(--accent)}
 </style>
@@ -233,7 +222,6 @@ input,textarea{font-family:var(--sans)}
     <div class="nav-item active" data-page="home"><span class="nav-dot"></span>Today in Space</div>
     <div class="nav-item" data-page="moon"><span class="nav-dot"></span>Moon Cycle</div>
     <div class="nav-item" data-page="asteroids"><span class="nav-dot"></span>Asteroids</div>
-    <div class="nav-item" data-page="mars"><span class="nav-dot"></span>Mars Gallery</div>
     <div class="nav-section-label">Your Library</div>
     <div class="nav-item" data-page="playlists"><span class="nav-dot"></span>Space Albums</div>
     <div class="nav-section-label" style="margin-top:.5rem">Albums</div>
@@ -274,23 +262,6 @@ input,textarea{font-family:var(--sans)}
       <div id="neoSection"><div class="loader"><div class="spin"></div><span>Scanning near-Earth space…</span></div></div>
     </div>
 
-    <div class="page" id="page-mars">
-      <div class="sec-head"><h2>Mars Rover Gallery</h2></div>
-      <div class="mars-controls">
-        <select id="roverSelect" style="background:var(--surface);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);color:var(--text);padding:.55rem .9rem;font-size:.88rem;outline:none;cursor:pointer;">
-          <option value="curiosity">Curiosity (active)</option>
-          <option value="perseverance">Perseverance (active)</option>
-          <option value="opportunity">Opportunity (retired)</option>
-          <option value="spirit">Spirit (retired)</option>
-        </select>
-        <label for="solInput">Sol</label>
-        <input type="number" id="solInput" value="" placeholder="leave blank = latest" min="1" max="5000" style="width:160px"/>
-        <button class="btn btn-sm" id="solBtn">Load Photos</button>
-        <button class="btn-ghost btn-sm" id="latestBtn">Latest</button>
-      </div>
-      <div id="marsSection"><div class="loader"><div class="spin"></div><span>Receiving signals from Mars…</span></div></div>
-    </div>
-
     <div class="page" id="page-playlists">
       <div class="sec-head">
         <h2>Space Albums</h2>
@@ -319,7 +290,6 @@ input,textarea{font-family:var(--sans)}
     <button class="bottom-nav-item active" data-page="home"><span class="bottom-nav-dot"></span>Today</button>
     <button class="bottom-nav-item" data-page="moon"><span class="bottom-nav-dot"></span>Moon</button>
     <button class="bottom-nav-item" data-page="asteroids"><span class="bottom-nav-dot"></span>Asteroids</button>
-    <button class="bottom-nav-item" data-page="mars"><span class="bottom-nav-dot"></span>Mars</button>
     <button class="bottom-nav-item" data-page="playlists"><span class="bottom-nav-dot"></span>Albums</button>
   </div>
 </div>
@@ -375,7 +345,7 @@ const DEFAULT_PLAYLISTS=[
   {id:'pl-3',title:'Orbit Dreams',desc:'Weightless hours above Earth. Watch the planet spin below.',cover:'https://images-assets.nasa.gov/image/iss040e081320/iss040e081320~thumb.jpg',created:Date.now()-86400000,isDefault:true,query:'earth orbit'},
   {id:'pl-4',title:'Mars Night Drive',desc:'Dust storms and red horizons. The long drive home.',cover:'https://images-assets.nasa.gov/image/PIA24307/PIA24307~thumb.jpg',created:Date.now(),isDefault:true,query:'mars'},
 ];
-const PAGE_TITLES={home:'Today in Space',moon:'Moon Cycle',asteroids:'Asteroids',mars:'Mars Gallery',playlists:'Space Albums'};
+const PAGE_TITLES={home:'Today in Space',moon:'Moon Cycle',asteroids:'Asteroids',playlists:'Space Albums'};
 
 let savedKey='';
 try{savedKey=localStorage.getItem('cosmos_api_key');}catch(e){}
@@ -393,7 +363,7 @@ document.getElementById('keyInput').addEventListener('keydown',e=>{if(e.key==='E
 function bootApp(){
   document.getElementById('keyScreen').style.display='none';
   document.getElementById('app').style.display='block';
-  loadPlaylists();fetchAPOD();fetchNEO();fetchMarsLatest('curiosity');renderPlaylists();initNav();
+  loadPlaylists();fetchAPOD();fetchNEO();renderPlaylists();initNav();
 }
 
 let currentPage='home';
@@ -418,10 +388,6 @@ async function apiFetch(url){
   catch(e){return{ok:false,status:0,data:{}};}
 }
 
-// ─── DYNAMIC DATE HELPERS ───────────────────────────────────────────────────
-// Always returns today's date in UTC as YYYY-MM-DD.
-// Using UTC prevents the date from flipping incorrectly near midnight
-// depending on the visitor's local timezone.
 function todayUTC() {
   const d = new Date();
   const y = d.getUTCFullYear();
@@ -430,7 +396,6 @@ function todayUTC() {
   return `${y}-${m}-${day}`;
 }
 
-// Returns a UTC date string offset by `offsetDays` from today (negative = past).
 function utcDateOffset(offsetDays) {
   const d = new Date();
   d.setUTCDate(d.getUTCDate() + offsetDays);
@@ -440,16 +405,13 @@ function utcDateOffset(offsetDays) {
   return `${y}-${m}-${day}`;
 }
 
-// Human-readable date from a YYYY-MM-DD string
 function formatDate(str){if(!str)return'';const d=new Date(str+'T12:00:00Z');return d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});}
-// ────────────────────────────────────────────────────────────────────────────
 
 async function fetchAPOD(dateStr){
   const sec=document.getElementById('apodSection');
   const moonContainer=document.getElementById('moonSection');
   sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Loading image…</span></div>`;
 
-  // If a specific date was requested, just try that one
   if(dateStr){
     const res=await apiFetch(NASA+'/planetary/apod?api_key='+API_KEY+'&date='+dateStr);
     if(res.ok&&res.data.title){
@@ -463,7 +425,6 @@ async function fetchAPOD(dateStr){
     return;
   }
 
-  // Default: try today, fall back up to 5 days if NASA hasn't published yet
   let apodData=null;
   for(let offset=0;offset<=5;offset++){
     const d=utcDateOffset(-offset);
@@ -478,7 +439,6 @@ async function fetchAPOD(dateStr){
   const d=apodData.date?new Date(apodData.date+'T12:00:00Z'):new Date();
   moonData=d;renderMoon(d,moonContainer);
   if(currentPage==='moon')renderMoonFull(d,document.getElementById('moonPageSection'));
-  // Set the date picker to the loaded date
   const picker=document.getElementById('apodDatePicker');
   if(picker)picker.value=apodData.date||todayUTC();
 }
@@ -515,18 +475,13 @@ function applyMoonShadow(id,age){
 
 async function fetchNEO(){
   const sec=document.getElementById('neoSection');
-
-  // ── Dynamic date: always fetch for the current UTC day ──
   const today = todayUTC();
-
   sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Scanning near-Earth space…</span></div>`;
-
   const{ok,data}=await apiFetch(`${NASA}/neo/rest/v1/feed?start_date=${today}&end_date=${today}&api_key=${API_KEY}`);
   if(!ok){sec.innerHTML=`<div class="err-banner">Couldn't load asteroid data. Please check your API key or try again shortly.</div>`;return;}
   const all=Object.values(data.near_earth_objects||{}).flat();
   const haz=all.filter(n=>n.is_potentially_hazardous_asteroid);
   const closest=all.length?Math.min(...all.map(n=>parseFloat(n.close_approach_data[0]?.miss_distance?.kilometers||Infinity))):0;
-
   sec.innerHTML=`
     <div class="neo-date-badge">Showing data for <span>${formatDate(today)}</span> · updates automatically each day</div>
     <div class="neo-stats-row">
@@ -553,95 +508,7 @@ async function fetchNEO(){
     }).join('')}</div>`;
 }
 
-function marsHttps(url){if(!url)return url;return url.replace(/^http:\/\//i,'https://');}
-
-const RETIRED_ROVERS={
-  opportunity:{lastDate:'2019-02-13'},
-  spirit:{lastDate:'2010-03-22'},
-};
-
-async function fetchMarsLatest(rover){
-  const sec=document.getElementById('marsSection');
-  sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Fetching photos from ${rover}…</span></div>`;
-
-  // For retired rovers, walk back from their last known earth date
-  const startDate = RETIRED_ROVERS[rover]
-    ? RETIRED_ROVERS[rover].lastDate
-    : utcDateOffset(0); // today for active rovers
-
-  await fetchMarsByDateWithFallback(rover, startDate, sec);
-}
-
-async function fetchMarsByDateWithFallback(rover, startDateStr, sec){
-  // Try up to 60 days back from startDate to find a day with photos
-  for(let offset=0; offset<60; offset++){
-    const d = new Date(startDateStr + 'T12:00:00Z');
-    d.setUTCDate(d.getUTCDate() - offset);
-    const dateStr = d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');
-
-    const{ok,status,data}=await apiFetch(`${NASA}/mars-photos/api/v1/rovers/${rover}/photos?earth_date=${dateStr}&api_key=${API_KEY}`);
-
-    if(status===429||status===403){
-      sec.innerHTML=`<div class="err-banner">Rate limit reached with DEMO_KEY (30 req/hr).<br>Please <a href="https://api.nasa.gov" target="_blank" style="color:var(--accent)">get a free NASA API key</a> — it takes 30 seconds and gives you 1,000 requests/hour.</div>`;
-      return;
-    }
-    if(ok && data.photos?.length){
-      document.getElementById('solInput').value = data.photos[0].sol;
-      document.getElementById('solInput').placeholder = dateStr;
-      renderMarsPhotos(data.photos, rover, data.photos[0].sol, sec, dateStr);
-      return;
-    }
-  }
-  sec.innerHTML=`<div class="empty-msg">No photos found for ${rover} in the last 60 days.<br>Try a different rover.</div>`;
-}
-
-async function fetchMarsBySol(rover,sol){
-  const sec=document.getElementById('marsSection');
-  sec.innerHTML=`<div class="loader"><div class="spin"></div><span>Fetching Sol ${sol} from ${rover}…</span></div>`;
-  const{ok,status,data}=await apiFetch(`${NASA}/mars-photos/api/v1/rovers/${rover}/photos?sol=${sol}&api_key=${API_KEY}`);
-  if(status===429||status===403){
-    sec.innerHTML=`<div class="err-banner">Rate limit reached. <a href="https://api.nasa.gov" target="_blank" style="color:var(--accent)">Get a free API key</a> for 1,000 req/hour.</div>`;return;
-  }
-  if(!ok||!data.photos?.length){
-    sec.innerHTML=`<div class="empty-msg">No photos on Sol ${sol} for ${rover}.<br>Not every sol has photos — try a nearby number or click <strong>Latest</strong>.<br><button class="btn btn-sm" style="margin-top:1rem" onclick="fetchMarsLatest('${rover}')">Load Latest</button></div>`;
-    return;
-  }
-  renderMarsPhotos(data.photos,rover,sol,sec,'');
-}
-
-function renderMarsPhotos(photos,rover,sol,sec,earthDate){
-  const roverLabel=rover.charAt(0).toUpperCase()+rover.slice(1);
-  const dateLabel=earthDate?` · ${earthDate}`:'';
-  sec.innerHTML=`
-    <p style="font-size:.78rem;color:var(--text3);margin-bottom:1rem">
-      ${roverLabel} · Sol ${sol}${dateLabel} · ${Math.min(photos.length,25)} photos
-    </p>
-    <div class="mars-gallery">
-      ${photos.slice(0,25).map(p=>{
-        const src=marsHttps(p.img_src);
-        const safeCaption=(`${p.camera.full_name} · Sol ${p.sol} · ${p.earth_date}`).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-        return`<div class="mars-photo" onclick="openLB('${src}','${safeCaption}')">
-          <img src="${src}" alt="${p.camera.name}" loading="lazy" onerror="this.closest('.mars-photo').style.display='none'"/>
-          <div class="mars-label">${p.camera.name}</div>
-        </div>`;
-      }).join('')}
-    </div>`;
-}
-
-document.getElementById('solBtn').addEventListener('click',()=>{
-  const rover=document.getElementById('roverSelect').value;
-  const solVal=document.getElementById('solInput').value.trim();
-  if(!solVal){fetchMarsLatest(rover);return;}
-  const sol=parseInt(solVal);
-  if(isNaN(sol)||sol<1){fetchMarsLatest(rover);return;}
-  fetchMarsBySol(rover,sol);
-});
-document.getElementById('latestBtn').addEventListener('click',()=>{
-  const rover=document.getElementById('roverSelect').value;
-  fetchMarsLatest(rover);
-});
-
-// APOD date picker — lets you browse any date back to June 16 1995
+// APOD date picker
 document.addEventListener('DOMContentLoaded',()=>{
   const picker=document.getElementById('apodDatePicker');
   if(picker){picker.min='1995-06-16';picker.max=todayUTC();}
